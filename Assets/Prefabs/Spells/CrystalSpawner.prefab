@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3728321439854146212}
   - component: {fileID: 3728321439854146215}
   - component: {fileID: 3728321439854146214}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: CrystalSpawner
   m_TagString: Spell
   m_Icon: {fileID: 0}

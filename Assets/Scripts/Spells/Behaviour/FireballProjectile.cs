@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForwardSpell : MonoBehaviour
+public class FireballProjectile : MonoBehaviour
 {
-	[SerializeField] SpellData spellStats;
+	[SerializeField] Fireball spellStats;
 
 	private Rigidbody2D rb;
-	public float speed = 150f;
 
 	// Start is called before the first frame update
 	void Awake()
 	{
+		transform.Rotate(0, 0, 90);
 		rb = GetComponent<Rigidbody2D>();
-		//transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
 	}
 
 	private void Start()
 	{
-		rb.velocity = transform.up * speed;
+		rb.velocity = transform.up * spellStats.projectileSpeed;
 	}
 
 	void OnCollisionEnter2D(Collision2D collider)
@@ -29,7 +28,7 @@ public class ForwardSpell : MonoBehaviour
 			Destroy(gameObject);
 		}
 
-		if (collider.gameObject.CompareTag("Wall"))
+		if (collider.gameObject.CompareTag("Terrain"))
 		{
 			Destroy(gameObject);
 		}

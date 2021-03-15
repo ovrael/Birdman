@@ -1,34 +1,19 @@
 fileFormatVersion: 2
-guid: e34f616f191fc104ea03e8eb426e100a
+guid: e3791be25e1643f409d98e7d9fc3a559
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2076517590904004216
-    second: TestTileSet_0
+      213: -1515603127067585740
+    second: Skeleton React_0
   - first:
-      213: -2277539718818796924
-    second: TestTileSet_1
+      213: -974260186754260340
+    second: Skeleton React_1
   - first:
-      213: 3745255275599511748
-    second: TestTileSet_2
+      213: 6619721271862762800
+    second: Skeleton React_2
   - first:
-      213: 1773877859069480360
-    second: TestTileSet_3
-  - first:
-      213: -2207676850754079953
-    second: TestTileSet_4
-  - first:
-      213: -3626380541104822801
-    second: TestTileSet_5
-  - first:
-      213: -9146103470502020663
-    second: TestTileSet_6
-  - first:
-      213: 8184092378783812274
-    second: TestTileSet_7
-  - first:
-      213: 5247105132458711829
-    second: TestTileSet_8
+      213: 436870274612170266
+    second: Skeleton React_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -72,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -111,7 +96,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Windows Store Apps
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
@@ -123,7 +108,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Android
+    buildTarget: Windows Store Apps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
@@ -138,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TestTileSet_0
+      name: Skeleton React_0
       rect:
         serializedVersion: 2
-        x: 192
-        y: 640
-        width: 64
-        height: 64
+        x: 0
+        y: 0
+        width: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87edeaf3fb541dc10800000000000000
-      internalID: 2076517590904004216
+      spriteID: 4335aa66cfe77fae0800000000000000
+      internalID: -1515603127067585740
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestTileSet_1
+      name: Skeleton React_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 640
-        width: 64
-        height: 64
+        x: 22
+        y: 0
+        width: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 48a66f151bd8460e0800000000000000
-      internalID: -2277539718818796924
+      spriteID: c82e4b1a58bba72f0800000000000000
+      internalID: -974260186754260340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestTileSet_2
+      name: Skeleton React_2
       rect:
         serializedVersion: 2
-        x: 320
-        y: 640
-        width: 64
-        height: 64
+        x: 44
+        y: 0
+        width: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -194,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c0444774d1d9f330800000000000000
-      internalID: 3745255275599511748
+      spriteID: 03d1a798c69fddb50800000000000000
+      internalID: 6619721271862762800
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestTileSet_3
+      name: Skeleton React_3
       rect:
         serializedVersion: 2
-        x: 448
-        y: 640
-        width: 64
-        height: 64
+        x: 66
+        y: 0
+        width: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,113 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ad44c0b3841e9810800000000000000
-      internalID: 1773877859069480360
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TestTileSet_4
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 640
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f2333fbd991cc51e0800000000000000
-      internalID: -2207676850754079953
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TestTileSet_5
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 640
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fe5ee0b7c128cadc0800000000000000
-      internalID: -3626380541104822801
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TestTileSet_6
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 640
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9c972c90a53821180800000000000000
-      internalID: -9146103470502020663
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TestTileSet_7
-      rect:
-        serializedVersion: 2
-        x: 704
-        y: 640
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2ba046648acb39170800000000000000
-      internalID: 8184092378783812274
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TestTileSet_8
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 640
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 51b945f415671d840800000000000000
-      internalID: 5247105132458711829
+      spriteID: a1e8f2b3333101600800000000000000
+      internalID: 436870274612170266
       vertices: []
       indices: 
       edges: []

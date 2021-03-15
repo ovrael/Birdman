@@ -4,13 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
-<<<<<<< Updated upstream
-=======
   - Spell
-  - Wall
   - Terrain
->>>>>>> Stashed changes
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -22,15 +18,8 @@ TagManager:
   - 
   - Ground
   - Player
-<<<<<<< Updated upstream
-  - Tilemap
-  - Damagable
-  - Dead
-=======
-  - Enemy
   - CollideSpells
   - NoCollideSpells
->>>>>>> Stashed changes
   - 
   - 
   - 
@@ -50,10 +39,8 @@ TagManager:
   - 
   - 
   - 
+  - Enemy
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Player
-    uniqueID: 3393082525
     locked: 0

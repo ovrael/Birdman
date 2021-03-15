@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6976103783975888991}
   - component: {fileID: 6976103783975888990}
   - component: {fileID: 6976103783975888989}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: BetterArc_TRAIL
   m_TagString: Spell
   m_Icon: {fileID: 0}
