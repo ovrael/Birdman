@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c79fab4c2f283b4cb931de213a69498, type: 3}
+  m_Name: Arc
+  m_EditorClassIdentifier: 
+  spellName: Arc
+  description: Jumping lightning
+  icon: {fileID: 21300000, guid: e25496335a5b13046b1e42d031c71c1a, type: 3}
+  manaCost: 30
+  cooldown: 3
+  isOnCooldown: 0
+  spellDuration: 0
+  target: 0
+  damageType: 0
+  minDamagePerInstance: 5
+  maxDamagePerInstance: 40
+  isDamageOverTime: 0
+  timeBetweenDamageInstances: 0
+  damageOverTimeDuration: 0
+  jumpsBetweenEnemies: 20
+  projectileSpeed: 6
+  freeFlyTime: 10
+  findEnemyRadius: 4
+  attackEnemyRadius: 0.3

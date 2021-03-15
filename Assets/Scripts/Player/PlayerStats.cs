@@ -5,6 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
+<<<<<<< Updated upstream:Assets/Scripts/Player/PlayerStats.cs
+=======
+	[Header("God mode")]
+	[SerializeField] bool unlimitedHP;
+	[SerializeField] bool unlimitedMP;
+	[SerializeField] bool noCooldowns;
+
+	public bool NoCooldowns { get => noCooldowns; }
+>>>>>>> Stashed changes:Assets/Scripts/PlayerStats.cs
 
 	#region Health
 	[Header("Health")]
@@ -32,7 +41,7 @@ public class PlayerStats : MonoBehaviour
 		get => currentHP;
 		set
 		{
-			if (value > 0 && value <= maxHP)
+			if (value <= maxHP)
 			{
 				currentHP = value;
 			}
@@ -68,12 +77,35 @@ public class PlayerStats : MonoBehaviour
 		get => currentMP;
 		set
 		{
-			if (value > 0 && value <= maxMP)
+			if (value >= 0 && value <= maxMP)
 			{
 				currentMP = value;
 			}
 		}
 	}
+
+	#endregion
+
+	#region Spells
+	[Header("Spels")]
+
+	// Available in Unity
+	[SerializeField] int maxSpells = 3;
+	[SerializeField] SpellData[] spells;
+
+	public SpellData[] Spells
+	{
+		get => spells;
+		set
+		{
+			if (value.Length <= maxSpells)
+			{
+				Spells = value;
+			}
+		}
+	}
+
+
 
 	#endregion
 
@@ -164,6 +196,16 @@ public class PlayerStats : MonoBehaviour
 		hpSlider.value = currentHP;
 		mpSlider.value = currentMP;
 		expSlider.value = currentExp;
+
+		if (unlimitedHP)
+		{
+			currentHP = maxHP;
+		}
+
+		if (unlimitedMP)
+		{
+			currentMP = maxMP;
+		}
 
 		if (currentExp >= expNeededToLevelUp)
 		{

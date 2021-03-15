@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+<<<<<<< Updated upstream
+=======
+  - Spell
+  - Wall
+  - Terrain
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
@@ -16,9 +22,15 @@ TagManager:
   - 
   - Ground
   - Player
+<<<<<<< Updated upstream
   - Tilemap
   - Damagable
   - Dead
+=======
+  - Enemy
+  - CollideSpells
+  - NoCollideSpells
+>>>>>>> Stashed changes
   - 
   - 
   - 

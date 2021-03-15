@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7382fa70a4dfb140957460a01ff9b4f, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  spellName: Fireball
+  description: A ball of fire
+  icon: {fileID: 21300000, guid: 97f86ccaafdc33a4098b9a9065d6ef74, type: 3}
+  manaCost: 15
+  cooldown: 5
+  isOnCooldown: 0
+  spellDuration: 0
+  target: 0
+  damageType: 1
+  minDamagePerInstance: 20
+  maxDamagePerInstance: 25
+  isDamageOverTime: 0
+  timeBetweenDamageInstances: 0
+  damageOverTimeDuration: 0
+  projectileSpeed: 2
