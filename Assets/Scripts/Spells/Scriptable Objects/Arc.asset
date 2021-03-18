@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c79fab4c2f283b4cb931de213a69498, type: 3}
   m_Name: Arc
   m_EditorClassIdentifier: 
-  spellName: Arc
+  name: 
   description: Jumping lightning
   icon: {fileID: 21300000, guid: e25496335a5b13046b1e42d031c71c1a, type: 3}
+  level: 1
   manaCost: 30
   cooldown: 3
   isOnCooldown: 0
-  spellDuration: 0
+  duration: 0
   target: 0
   damageType: 0
-  minDamagePerInstance: 5
-  maxDamagePerInstance: 40
+  minDamagePerInstance: 0
+  maxDamagePerInstance: 0
   isDamageOverTime: 0
   timeBetweenDamageInstances: 0
   damageOverTimeDuration: 0

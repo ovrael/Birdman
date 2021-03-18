@@ -7,6 +7,9 @@ TagManager:
   - Spell
   - Terrain
   - Enemy
+  - Interactable
+  - Manager
+  - Spawn
   layers:
   - Default
   - TransparentFX
@@ -20,7 +23,7 @@ TagManager:
   - Player
   - CollideSpells
   - NoCollideSpells
-  - 
+  - Objects
   - 
   - 
   - 

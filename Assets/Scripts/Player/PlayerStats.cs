@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
+	private const int fixedUpdateRate = 50;
+
+	[SerializeField] SceneChanger sceneChanger;
 
 	[Header("God mode")]
 	[SerializeField] bool unlimitedHP;
 	[SerializeField] bool unlimitedMP;
 	[SerializeField] bool noCooldowns;
+	[Tooltip("Player will stay alive at 1HP")]
+	[SerializeField] bool cantDie;
 
 	public bool NoCooldowns { get => noCooldowns; }
 
@@ -20,6 +27,8 @@ public class PlayerStats : MonoBehaviour
 	[SerializeField] Slider hpSlider;
 	[SerializeField] float maxHP = 500;
 	[SerializeField] float currentHP = 500;
+	[Tooltip("The regen is applied once per second")]
+	[SerializeField] float regenHP = 2.5f;
 
 	// Properties
 	public float MaxHp
@@ -43,7 +52,17 @@ public class PlayerStats : MonoBehaviour
 			{
 				currentHP = value;
 			}
+			else
+			{
+				currentHP = maxHP;
+			}
 		}
+	}
+
+	public float RegenHP
+	{
+		get => regenHP;
+		set => regenHP = value;
 	}
 
 
@@ -56,6 +75,8 @@ public class PlayerStats : MonoBehaviour
 	[SerializeField] Slider mpSlider;
 	[SerializeField] float maxMP = 200;
 	[SerializeField] float currentMP = 200;
+	[Tooltip("The regen is applied once per second")]
+	[SerializeField] float regenMP = 1.5f;
 
 	// Properties
 	public float MaxMP
@@ -79,31 +100,17 @@ public class PlayerStats : MonoBehaviour
 			{
 				currentMP = value;
 			}
-		}
-	}
-
-	#endregion
-
-	#region Spells
-	[Header("Spels")]
-
-	// Available in Unity
-	[SerializeField] int maxSpells = 3;
-	[SerializeField] SpellData[] spells;
-
-	public SpellData[] Spells
-	{
-		get => spells;
-		set
-		{
-			if (value.Length <= maxSpells)
+			if (value > maxMP)
 			{
-				Spells = value;
+				currentMP = maxMP;
 			}
 		}
 	}
-
-
+	public float RegenMP
+	{
+		get => regenMP;
+		set => regenMP = value;
+	}
 
 	#endregion
 
@@ -114,35 +121,73 @@ public class PlayerStats : MonoBehaviour
 	[SerializeField] Slider expSlider;
 	[SerializeField] float expNeededToLevelUp = 600;
 	[SerializeField] float currentExp = 0;
-	[SerializeField] Text playerLevelText;
-	[SerializeField] int playerLevel = 1;
+	[SerializeField] int level = 1;
+	[SerializeField] Text levelText;
+	[SerializeField] int spellPoints = 1;
+	[SerializeField] TMP_Text spellPointsText;
+
+	public float CurrentExp
+	{
+		get => currentExp;
+		set
+		{
+			if (value > 0)
+			{
+				currentExp = value;
+			}
+		}
+	}
+
+	public int Level
+	{
+		get => level;
+	}
+
+	public int SpellPoints
+	{
+		get => spellPoints;
+		set
+		{
+			if (value >= 0)
+			{
+				spellPoints = value;
+				spellPointsText.text = spellPoints.ToString();
+			}
+		}
+	}
 
 	void LevelUpPlayer()
 	{
-		playerLevel++;
-
-		UpdateStatsAndHUD();
+		UpdateStats();
+		UpdateHUD();
 		// The rest - WIP
 	}
 
-	void UpdateStatsAndHUD()
+	void UpdateHUD()
 	{
-		bool isFullHP = (currentHP >= maxHP) ? true : false;
-		bool isFullMP = (currentMP >= maxMP) ? true : false;
+		expSlider.maxValue = expNeededToLevelUp;
+		hpSlider.maxValue = maxHP;
+		mpSlider.maxValue = maxMP;
+		levelText.text = level.ToString();
+		spellPointsText.text = spellPoints.ToString();
+	}
 
-		playerLevelText.text = string.Format($"{playerLevel}");
+	void UpdateStats()
+	{
+		level++;
+		spellPoints++;
 
 		currentExp -= expNeededToLevelUp;
 		expNeededToLevelUp += 50;
-		expSlider.maxValue = expNeededToLevelUp;
+
+		bool isFullHP = (currentHP >= maxHP) ? true : false;
+		bool isFullMP = (currentMP >= maxMP) ? true : false;
 
 		maxHP += 30;
-		hpSlider.maxValue = maxHP;
 		if (isFullHP)
 			currentHP = maxHP;
 
 		maxMP += 10;
-		mpSlider.maxValue = maxMP;
 		if (isFullMP)
 			currentMP = maxMP;
 	}
@@ -155,15 +200,18 @@ public class PlayerStats : MonoBehaviour
 	// Available in Unity
 	[SerializeField] float speed = 20;                               // Start at about 20
 	[SerializeField] float jumpPower = 250;                          // Start at about 250  
-	/*[SerializeField] float fallMultiplier;                         // Start at about 3
-	 */
 
 	// Properties
 	public float Speed { get => speed; }
 	public float JumpPower { get => jumpPower; }
-	//public float FallMultiplier { get => fallMultiplier; set => fallMultiplier = value; }
 
 	#endregion
+
+	public void TakeDamage(float damageTaken)
+	{
+		CurrentHP -= damageTaken;
+	}
+
 
 	private void Awake()
 	{
@@ -180,13 +228,19 @@ public class PlayerStats : MonoBehaviour
 		expSlider.maxValue = expNeededToLevelUp;
 		expSlider.value = currentExp;
 
-		playerLevelText.text = string.Format($"{playerLevel}");
+		levelText.text = level.ToString();
+		spellPointsText.text = spellPoints.ToString();
 	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "SceneManager").FirstOrDefault();
 
+		if (sceneManager != null)
+		{
+			sceneChanger = sceneManager.GetComponent<SceneChanger>();
+		}
 	}
 
 	private void Update()
@@ -209,5 +263,26 @@ public class PlayerStats : MonoBehaviour
 		{
 			LevelUpPlayer();
 		}
+
+		if (currentHP <= 0)
+		{
+			if (!cantDie)
+			{
+				Debug.LogWarning("GAME OVER");
+
+				Time.timeScale = 0f;
+				sceneChanger.LoadGameOver();
+			}
+			else
+			{
+				currentHP = 1f;
+			}
+		}
+	}
+
+	private void FixedUpdate()
+	{
+		CurrentHP += regenHP / fixedUpdateRate;
+		CurrentMP += regenMP / fixedUpdateRate;
 	}
 }
