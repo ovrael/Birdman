@@ -6,7 +6,8 @@ using System;
 
 public class SpellSystem : MonoBehaviour
 {
-	[SerializeField] Transform spellSpawnPoint;
+	[SerializeField] Transform attackSpellSpawnPoint;
+	[SerializeField] Transform selfTargetSpellSpawnPoint;
 	public bool restart;
 
 	[Header("Spells")]
@@ -37,7 +38,11 @@ public class SpellSystem : MonoBehaviour
 			float sideRotation = (Math.Sign(player.transform.localScale.x) == 1) ? 180 : 0;
 			Quaternion spellRotation = Quaternion.Euler(new Vector3(0, sideRotation, 0));
 
-			Instantiate(spellPrefabs[spellNumber], spellSpawnPoint.position, spellRotation);
+			if (spellsData[spellNumber].target == Target.Enemy || spellsData[spellNumber].target == Target.NoTarget)
+				Instantiate(spellPrefabs[spellNumber], attackSpellSpawnPoint.position, spellRotation);
+
+			if (spellsData[spellNumber].target == Target.Player)
+				Instantiate(spellPrefabs[spellNumber], selfTargetSpellSpawnPoint.position, spellRotation, selfTargetSpellSpawnPoint);
 
 			player.CurrentMP -= spellsData[spellNumber].manaCost;
 
@@ -56,11 +61,11 @@ public class SpellSystem : MonoBehaviour
 		{
 			cooldownSliders[i] = buttons[i].GetComponentInChildren<Slider>();
 			buttons[i].image.sprite = spellsData[i].icon;
-		}
 
-		buttons[0].onClick.AddListener(() => { UseSpell(0); });
-		buttons[1].onClick.AddListener(() => { UseSpell(1); });
-		buttons[2].onClick.AddListener(() => { UseSpell(2); });
+			int x = i;
+			buttons[x].onClick.RemoveAllListeners();
+			buttons[x].onClick.AddListener(() => { UseSpell(x); });
+		}
 	}
 
 	public void Update()

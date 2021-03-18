@@ -6,7 +6,9 @@ public enum SpellDamageType
 {
 	Lightning = 0,
 	Fire = 1,
-	Cold = 2
+	Water = 2,
+	Ice = 3,
+	Heal = 11
 }
 
 public enum Target
@@ -19,18 +21,37 @@ public enum Target
 [CreateAssetMenu(fileName = "New Spell", menuName = "Spells/Clear Spell")]
 public class SpellData : ScriptableObject
 {
-	[Header("Shared stats")]
-	public string spellName;
+	[Header("Description")]
+	public new string name;
 	public string description;
-
 	public Sprite icon;
+
+	[SerializeField] int level = 0;
+	[SerializeField] int maxLevel = 20;
+
+	public int Level
+	{
+		get => level;
+		set
+		{
+			if (value >= 0 && value <= maxLevel)
+			{
+				level = value;
+			}
+		}
+	}
+
+	public int MaxLevel
+	{
+		get => maxLevel;
+	}
 
 	public float manaCost;
 
 	[Header("Time")]
 	public float cooldown;
 	public bool isOnCooldown;
-	public float spellDuration = 0f;
+	public float duration = 0f;
 
 	[Header("Damage")]
 	public Target target;
@@ -44,11 +65,13 @@ public class SpellData : ScriptableObject
 	public float timeBetweenDamageInstances = 0f;
 	public float damageOverTimeDuration = 0f;
 
-
-	private readonly System.Random numberGenerator = new System.Random();
-
 	public float CalculateDamagePerInstance()
 	{
-		return (float)numberGenerator.NextDouble() * (maxDamagePerInstance - minDamagePerInstance) + minDamagePerInstance;
+		return Random.Range(minDamagePerInstance, maxDamagePerInstance);
+	}
+
+	public void LevelUp()
+	{
+		Level++;
 	}
 }

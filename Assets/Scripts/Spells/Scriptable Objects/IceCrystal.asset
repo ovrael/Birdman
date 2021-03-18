@@ -12,21 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a91622610173f4ea12e9b558e98859, type: 3}
   m_Name: IceCrystal
   m_EditorClassIdentifier: 
-  spellName: Ice Crystal
+  name: 
   description: Crystal of ice
   icon: {fileID: 21300000, guid: e3008dff153bdaa468bef103168790f5, type: 3}
+  level: 6
   manaCost: 40
   cooldown: 10
   isOnCooldown: 0
-  spellDuration: 8
+  duration: 0
   target: 1
   damageType: 2
-  minDamagePerInstance: 40
-  maxDamagePerInstance: 60
+  minDamagePerInstance: 25
+  maxDamagePerInstance: 40
   isDamageOverTime: 0
   timeBetweenDamageInstances: 0
   damageOverTimeDuration: 0
-  projectileSpawnTime: 0.01
-  projectileSpeed: 6
+  projectileSpawnTime: 0.5
+  projectileSpeed: 10
   setUpFlySpeed: 3
-  setUpFlyTime: 1.5
+  setUpFlyTime: 1.2

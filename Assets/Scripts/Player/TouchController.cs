@@ -29,7 +29,7 @@ public class TouchController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		
+
 		if (joystick.Horizontal >= 0.2f)
 		{
 			horizontalMove = playerStats.Speed;
@@ -49,25 +49,25 @@ public class TouchController : MonoBehaviour
 			animator.SetBool("IsJumping", true);
 		}
 
-		if (rigidBody.velocity.y < 0)
-		{
-			rigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-		}
-		else if (rigidBody.velocity.y > 0 && !isJumping)
-		{
-			rigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-		}
-
 		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 	}
 
 	public void OnLanding()
-    {
+	{
 		animator.SetBool("IsJumping", false);
-    }
+	}
 
 	private void FixedUpdate()
 	{
+		if (rigidBody.velocity.y < 0)
+		{
+			rigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+		}
+		else if (rigidBody.velocity.y > 0 && !isJumping)
+		{
+			rigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+		}
+
 		characterController2D.Move(horizontalMove * Time.fixedDeltaTime, playerStats.JumpPower, isJumping);
 		isJumping = false;
 	}
