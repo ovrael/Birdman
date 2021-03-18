@@ -207,6 +207,12 @@ public class PlayerStats : MonoBehaviour
 
 	#endregion
 
+	public void TakeDamage(float damageTaken)
+	{
+		CurrentHP -= damageTaken;
+	}
+
+
 	private void Awake()
 	{
 		// Set up
