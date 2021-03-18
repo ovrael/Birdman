@@ -12,14 +12,16 @@ public class EnemyBehaviour : MonoBehaviour
     public Transform leftLimit;
     public Transform rightLimit;
     [HideInInspector] public Transform target;
-    [HideInInspector] public bool inRange; //Check if Player is in range
+    [HideInInspector] public bool inRange; //Check if  is in range
+    public Collider2D targetCollider;
+    public BoxCollider2D hitBox;
     public GameObject hotZone;
     public GameObject triggerArea;
     #endregion
 
     #region Private Variables
     private Animator anim;
-    private float distance; //Store the distance b/w enemy and player
+    private float distance; //Store the distance b/w enemy and 
     private bool attackMode;
     private bool cooling; //Check if Enemy is cooling after attack
     private float intTimer;
@@ -84,11 +86,13 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Attack()
     {
-        timer = intTimer; //Reset Timer when Player enter Attack Range
+        timer = intTimer; //Reset Timer when  enter Attack Range
         attackMode = true; //To check if Enemy can still attack or not
 
         anim.SetBool("canWalk", false);
         anim.SetBool("Attack", true);
+
+        if (hitBox.IsTouching(targetCollider)) Debug.LogWarning("uderzony XD");
     }
 
     void Cooldown()
@@ -157,4 +161,14 @@ public class EnemyBehaviour : MonoBehaviour
 
         transform.eulerAngles = rotation;
     }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (target.CompareTag("Player"))
+    //    {
+         
+    //        else Debug.LogWarning("nie dzisiaj");
+    //    }
+    //}
 }
+
