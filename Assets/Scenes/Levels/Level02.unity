@@ -776,6 +776,8 @@ MonoBehaviour:
   rightLimit: {fileID: 109057513}
   target: {fileID: 0}
   inRange: 0
+  targetCollider: {fileID: 0}
+  hitBox: {fileID: 1272314331}
   hotZone: {fileID: 361174730}
   triggerArea: {fileID: 1480439749}
 --- !u!95 &233119733
@@ -4588,7 +4590,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575771008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.930915, y: -3.4900002, z: -10}
+  m_LocalPosition: {x: -4.9423847, y: -3.4900002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4906,7 +4908,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1816475978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.930915, y: -3.4900002, z: -10}
+  m_LocalPosition: {x: -4.9423847, y: -3.4900002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1865588031}
