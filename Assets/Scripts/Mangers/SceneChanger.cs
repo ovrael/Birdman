@@ -10,7 +10,6 @@ public class SceneChanger : MonoBehaviour
 
 	private void Awake()
 	{
-		Debug.Log("I'M AWAKE --- Scene changer");
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(player);
 		foreach (GameObject savedObject in savedObjects)
@@ -28,9 +27,15 @@ public class SceneChanger : MonoBehaviour
 
 	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 	{
+		// TO ADD: SCENE CHANGE ANIMATION
 		Transform spawnPoint = GameObject.FindGameObjectWithTag("Spawn").transform;
 		player.transform.position = spawnPoint.position;
 	}
+
+	//IEnumerator LoadlScene()
+	//{
+	//	yield return new WaitForSeconds(2f);
+	//}
 
 	public void LoadMenu()
 	{

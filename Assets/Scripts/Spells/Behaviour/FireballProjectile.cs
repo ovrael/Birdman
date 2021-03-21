@@ -11,6 +11,7 @@ public class FireballProjectile : MonoBehaviour
 	// Start is called before the first frame update
 	void Awake()
 	{
+		Destroy(gameObject, spellStats.duration);
 		transform.Rotate(0, 0, 90);
 		rb = GetComponent<Rigidbody2D>();
 	}
