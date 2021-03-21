@@ -92,7 +92,11 @@ public class EnemyBehaviour : MonoBehaviour
         anim.SetBool("canWalk", false);
         anim.SetBool("Attack", true);
 
-        if (hitBox.IsTouching(targetCollider)) Debug.LogWarning("uderzony XD");
+        if (hitBox.IsTouching(targetCollider))
+        {
+            float damage = gameObject.GetComponent<EnemyStats>().Damage;
+            target.gameObject.GetComponent<PlayerStats>().TakeDamage(damage);
+        }
     }
 
     void Cooldown()
@@ -125,8 +129,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SelectTarget()
     {
-        float distanceToLeft = Vector3.Distance(transform.position, leftLimit.position);
-        float distanceToRight = Vector3.Distance(transform.position, rightLimit.position);
+        float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
+        float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
 
         if (distanceToLeft > distanceToRight)
         {
@@ -145,21 +149,19 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void Flip()
     {
-        Vector3 rotation = transform.eulerAngles;
+    
         if (transform.position.x > target.position.x)
         {
-            rotation.y = 180;
+            transform.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
-            Debug.Log("Twist");
-            rotation.y = 0;
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
 
         //Ternary Operator
         //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
 
-        transform.eulerAngles = rotation;
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)
