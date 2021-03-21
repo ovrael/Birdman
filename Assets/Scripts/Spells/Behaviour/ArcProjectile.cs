@@ -30,7 +30,7 @@ public class ArcProjectile : MonoBehaviour
 	private void Start()
 	{
 		rb.velocity = transform.up * spellStats.projectileSpeed;
-		destroyTime = Time.time + spellStats.duration;
+		destroyTime = Time.time + spellStats.freeFlyTime;
 	}
 
 
@@ -174,4 +174,23 @@ public class ArcProjectile : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+
+	//private void OnTriggerEnter2D(Collider2D what)
+	//{
+
+	//}
+
+	//void OnCollisionEnter2D(Collision2D collider)
+	//{
+	//	if (collider.gameObject.CompareTag("Enemy"))
+	//	{
+	//		collider.gameObject.GetComponent<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
+	//		Destroy(gameObject);
+	//	}
+
+	//	if (collider.gameObject.CompareTag("Wall"))
+	//	{
+	//		Destroy(gameObject);
+	//	}
+	//}
 }

@@ -8,7 +8,7 @@ public class SpellTile : MonoBehaviour
 {
 	[Header("Utils")]
 	[SerializeField] PlayerStats player;
-	public SpellData spell;
+	[SerializeField] SpellData spell;
 	[SerializeField] Button button;
 	[SerializeField] bool resetLevel;
 
@@ -57,12 +57,9 @@ public class SpellTile : MonoBehaviour
 	{
 		if (CheckRequirements())
 		{
-			if (spell.Level < spell.MaxLevel)
-			{
-				spell.LevelUp();
-				spellLevelText.text = spell.Level.ToString();
-				player.SpellPoints--;
-			}
+			spell.LevelUp();
+			spellLevelText.text = spell.Level.ToString();
+			player.SpellPoints--;
 		}
 	}
 
