@@ -24071,7 +24071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8022df8323766f4b82514b0ab3e816a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellSystem: {fileID: 0}
+  spellSystem: {fileID: 505683160}
 --- !u!114 &972696223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31629,7 +31629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8022df8323766f4b82514b0ab3e816a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellSystem: {fileID: 0}
+  spellSystem: {fileID: 505683160}
 --- !u!114 &1392267645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32630,7 +32630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8022df8323766f4b82514b0ab3e816a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellSystem: {fileID: 0}
+  spellSystem: {fileID: 505683160}
 --- !u!114 &1473102158
 MonoBehaviour:
   m_ObjectHideFlags: 0

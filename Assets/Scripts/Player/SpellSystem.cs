@@ -50,7 +50,7 @@ public class SpellSystem : MonoBehaviour
 	{
 		if (player.CurrentMP >= spellsData[spellNumber].manaCost && !spellsData[spellNumber].isOnCooldown)
 		{
-			float sideRotation = (Math.Sign(player.transform.localScale.x) == 1) ? 180 : 0;
+			float sideRotation = (Math.Sign(player.transform.parent.transform.localScale.x) == 1) ? 180 : 0;
 			Quaternion spellRotation = Quaternion.Euler(new Vector3(0, sideRotation, 0));
 
 			if (spellsData[spellNumber].target == Target.Enemy || spellsData[spellNumber].target == Target.NoTarget)
@@ -163,7 +163,7 @@ public class SpellSystem : MonoBehaviour
 	{
 
 		restart = false;
-		player = GetComponent<PlayerStats>();
+		player = transform.parent.GetComponentInChildren<PlayerStats>();
 		nextSpellsUse = new float[3];
 
 
