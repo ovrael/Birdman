@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 public class LevelPortal : MonoBehaviour
 {
 	[SerializeField] string nextSceneName;
 
 	Button enterButton;
+	GameObject warningText;
+
 	SceneChanger sceneChanger;
 	bool buttonListenerAssigned;
 
 	private void FindEnterButton()
 	{
-		var enterBtn = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(b => b.name == "EnterButton");
+		var enterBtn = Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(b => b.name == "EnterButton");
+		warningText = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(b => b.name == "SpellRequire");
 
 		//Button enterBtn = HudCanvas.GetComponentsInChildren<Button>().Where(b => b.name == "EnterButton").FirstOrDefault();
 
 		if (enterBtn != null)
 		{
-			enterButton = enterBtn.GetComponent<Button>();
+			enterButton = enterBtn;
 		}
 	}
 
@@ -73,7 +77,14 @@ public class LevelPortal : MonoBehaviour
 	{
 		if (collision.CompareTag("Player"))
 		{
-			enterButton.gameObject.SetActive(true);
+			if (collision.gameObject.GetComponent<SpellSystem>().AssignedSpellsCount() == 3)
+			{
+				enterButton.gameObject.SetActive(true);
+			}
+			else
+			{
+				warningText.gameObject.SetActive(true);
+			}
 		}
 	}
 
@@ -82,6 +93,7 @@ public class LevelPortal : MonoBehaviour
 		if (collision.CompareTag("Player"))
 		{
 			enterButton.gameObject.SetActive(false);
+			warningText.gameObject.SetActive(false);
 		}
 	}
 }

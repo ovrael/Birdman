@@ -80,7 +80,7 @@ public class SpellTile : MonoBehaviour
 			}
 		}
 
-		if (hasRequiedSpells && player.SpellPoints > 0 && player.Level >= requiedLevel && spell.Level <= spell.MaxLevel)
+		if (hasRequiedSpells && player.SpellPoints > 0 && player.Level >= requiedLevel && spell.Level < spell.MaxLevel)
 			canUpgrade = true;
 
 		return canUpgrade;

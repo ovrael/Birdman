@@ -9,6 +9,8 @@ public class PauseManager : MonoBehaviour
 	[SerializeField] static bool gameIsPaused = false;
 	[SerializeField] GameObject pauseCanva;
 
+	[SerializeField] float timeSpeed = 1f;
+
 	private void Awake()
 	{
 		ResumeGame();
@@ -26,5 +28,10 @@ public class PauseManager : MonoBehaviour
 		pauseCanva.SetActive(true);
 		gameIsPaused = true;
 		Time.timeScale = 0f;
+	}
+
+	private void Update()
+	{
+		Time.timeScale = timeSpeed;
 	}
 }

@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
+	[SerializeField] bool drawGizmos = true;
+
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
 	[SerializeField] private bool m_AirControl = false;                         // Whether or not a player can steer while jumping;
 	[SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
@@ -10,7 +12,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private PhysicsMaterial2D slipperyMaterial;                // Material used when jumping to avoid sticking to walls
 	[SerializeField] private PhysicsMaterial2D frictionMaterial;                // Material used when walking
 
-	const float k_GroundedRadius = .05f; // Radius of the overlap circle to determine if grounded
+	[SerializeField] float k_GroundedRadius = .05f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -110,5 +112,13 @@ public class CharacterController2D : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	private void OnDrawGizmos()
+	{
+		if (drawGizmos)
+		{
+			Gizmos.DrawWireSphere(m_GroundCheck.position, k_GroundedRadius);
+		}
 	}
 }

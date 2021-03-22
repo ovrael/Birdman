@@ -4,30 +4,46 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 
+[Serializable]
+public class SpellButton
+{
+	public Image icon;
+	public Image background;
+
+	public Button button;
+	public Slider cooldown;
+}
+
+
 public class SpellSystem : MonoBehaviour
 {
+	[Tooltip("Use it to reassign spells or after changes in script")]
+	[SerializeField] bool restart;
+
+	[Header("Spell spawn points")]
 	[SerializeField] Transform attackSpellSpawnPoint;
 	[SerializeField] Transform selfTargetSpellSpawnPoint;
-	public bool restart;
 
 	[Header("Spells")]
 	[SerializeField] SpellData[] spellsData;
 
 	[Header("Buttons")]
-	[SerializeField] Button[] buttons;
-	private Slider[] cooldownSliders;
+	[SerializeField] SpellButton[] buttons;
+
 	private float[] nextSpellsUse;
 
 	private PlayerStats player;
 
-	private void Awake()
+	public int AssignedSpellsCount()
 	{
-		restart = false;
-		player = GetComponent<PlayerStats>();
-		cooldownSliders = new Slider[3];
-		nextSpellsUse = new float[3];
+		int assigned = 0;
 
-		AssignSpellsToButtons();
+		foreach (var item in spellsData)
+		{
+			if (item != null)
+				assigned++;
+		}
+		return assigned;
 	}
 
 	public void UseSpell(int spellNumber)
@@ -52,7 +68,7 @@ public class SpellSystem : MonoBehaviour
 			if (!player.NoCooldowns)
 			{
 				spellsData[spellNumber].isOnCooldown = true;
-				cooldownSliders[spellNumber].value = 1;
+				buttons[spellNumber].cooldown.value = 1;
 				nextSpellsUse[spellNumber] = Time.time + spellsData[spellNumber].cooldown;
 			}
 		}
@@ -60,25 +76,20 @@ public class SpellSystem : MonoBehaviour
 
 	public void AssignSpellToButton(int buttonIndex, SpellData spell)
 	{
-		bool canAssignSpell = true;
-
 		for (int i = 0; i < spellsData.Length; i++)
 		{
 			if (spellsData[i] != null)
 			{
 				if (spellsData[i] == spell)
 				{
-					canAssignSpell = false;
+					spellsData[i] = null;
 					break;
 				}
 			}
 		}
 
-		if (canAssignSpell)
-		{
-			spellsData[buttonIndex] = spell;
-			AssignSpellsToButtons();
-		}
+		spellsData[buttonIndex] = spell;
+		AssignSpellsToButtons();
 	}
 
 	private void AssignSpellsToButtons()
@@ -87,14 +98,81 @@ public class SpellSystem : MonoBehaviour
 		{
 			if (spellsData[i] != null)
 			{
-				cooldownSliders[i] = buttons[i].GetComponentInChildren<Slider>();
-				buttons[i].image.sprite = spellsData[i].icon;
+				buttons[i].icon.color = new Color(1, 1, 1, 1);
+				buttons[i].icon.sprite = spellsData[i].icon;
 
 				int x = i;
-				buttons[x].onClick.RemoveAllListeners();
-				buttons[x].onClick.AddListener(() => { UseSpell(x); });
+				buttons[x].button.onClick.RemoveAllListeners();
+				buttons[x].button.onClick.AddListener(() => { UseSpell(x); });
+			}
+			else
+			{
+				buttons[i].icon.color = new Color(1, 1, 1, 0);
+				buttons[i].icon.sprite = null;
+
+				int x = i;
+				buttons[x].button.onClick.RemoveAllListeners();
 			}
 		}
+	}
+
+	private void DisableImages(int index)
+	{
+		buttons[index].icon.color = new Color(0.5f, 0.5f, 0.5f, 1);
+		buttons[index].background.color = new Color(0.5f, 0.5f, 0.5f, 1);
+	}
+
+	private void ActivateImages(int index)
+	{
+		buttons[index].icon.color = new Color(1, 1, 1, 1);
+		buttons[index].background.color = new Color(1, 1, 1, 1);
+	}
+
+
+	private void CheckMana(int spellIndex)
+	{
+		if (player.CurrentMP < spellsData[spellIndex].manaCost)
+		{
+			buttons[spellIndex].button.interactable = false;
+			DisableImages(spellIndex);
+		}
+		else
+		{
+			if (Time.time > nextSpellsUse[spellIndex])
+			{
+				buttons[spellIndex].button.interactable = true;
+			}
+			ActivateImages(spellIndex);
+		}
+	}
+
+	private void CheckCooldown(int spellIndex)
+	{
+		if (Time.time > nextSpellsUse[spellIndex])
+		{
+			spellsData[spellIndex].isOnCooldown = false;
+			buttons[spellIndex].cooldown.value = 0f;
+		}
+		else
+		{
+			buttons[spellIndex].cooldown.value = (nextSpellsUse[spellIndex] - Time.time) / spellsData[spellIndex].cooldown;
+		}
+	}
+
+	private void Awake()
+	{
+
+		restart = false;
+		player = GetComponent<PlayerStats>();
+		nextSpellsUse = new float[3];
+
+
+		for (int i = 0; i < buttons.Length; i++)
+		{
+			buttons[i].cooldown.value = 0f;
+		}
+
+		AssignSpellsToButtons();
 	}
 
 	public void Update()
@@ -109,26 +187,8 @@ public class SpellSystem : MonoBehaviour
 		{
 			if (spellsData[i] != null)
 			{
-				if (player.CurrentMP < spellsData[i].manaCost)
-				{
-					buttons[i].interactable = false;
-				}
-				else
-				{
-					buttons[i].interactable = true;
-				}
-
-				if (Time.time > nextSpellsUse[i])
-				{
-					spellsData[i].isOnCooldown = false;
-					cooldownSliders[i].value = 0;
-					buttons[i].transition = Selectable.Transition.ColorTint;
-				}
-				else
-				{
-					buttons[i].transition = Selectable.Transition.None;
-					cooldownSliders[i].value = (nextSpellsUse[i] - Time.time) / spellsData[i].cooldown;
-				}
+				CheckMana(i);
+				CheckCooldown(i);
 			}
 		}
 	}

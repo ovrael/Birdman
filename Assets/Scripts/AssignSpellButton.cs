@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SpellButton : MonoBehaviour, IDropHandler
+public class AssignSpellButton : MonoBehaviour, IDropHandler
 {
 	[SerializeField] SpellSystem spellSystem;
 
