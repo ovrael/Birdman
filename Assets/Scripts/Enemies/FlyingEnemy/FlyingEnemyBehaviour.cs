@@ -9,7 +9,7 @@ public class FlyingEnemyBehaviour : MonoBehaviour
     #region Public Variables
     public float attackDistance; //Minimum distance for attack
     public float timer; //Timer for cooldown between attacks
-    [HideInInspector] public Transform target;
+    public Transform target;
     [HideInInspector] public bool inRange; //Check if  is in range
     public Collider2D targetCollider;
     public BoxCollider2D hitBox;
@@ -39,11 +39,7 @@ public class FlyingEnemyBehaviour : MonoBehaviour
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
         }
-  
-        if (inRange)
-        {
-            EnemyLogic();
-        }
+        EnemyLogic();
     }
 
     void EnemyLogic()
@@ -56,7 +52,12 @@ public class FlyingEnemyBehaviour : MonoBehaviour
         }
         else if (attackDistance >= distance && cooling == false)
         {
-            Attack();
+            if (hitBox.IsTouching(targetCollider))
+            {
+                //float damage = gameObject.GetComponent<EnemyStats>().Damage;
+                target.gameObject.GetComponent<PlayerStats>().TakeDamage(100);
+                Debug.LogWarning("damage jebany furrasie!");
+            }
         }
 
         if (cooling)
@@ -64,19 +65,7 @@ public class FlyingEnemyBehaviour : MonoBehaviour
             Cooldown();
         }
     }
-   
-    void Attack()
-    {
-        timer = intTimer; //Reset Timer when  enter Attack Range
-        attackMode = true; //To check if Enemy can still attack or not
 
-        if (hitBox.IsTouching(targetCollider))
-        {
-            float damage = gameObject.GetComponent<EnemyStats>().Damage;
-            target.gameObject.GetComponent<PlayerStats>().TakeDamage(damage);
-            Debug.LogWarning("damage jebany furrasie!");
-        }
-    }
 
     void Cooldown()
     {

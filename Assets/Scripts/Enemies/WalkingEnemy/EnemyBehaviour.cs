@@ -94,8 +94,9 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (hitBox.IsTouching(targetCollider))
         {
-            float damage = gameObject.GetComponent<EnemyStats>().Damage;
-            target.gameObject.GetComponent<PlayerStats>().TakeDamage(damage);
+            //we have to get the damage stats from enemy but this line is not working
+            //float damage = gameObject.GetComponent<EnemyStats>().Damage;
+            target.gameObject.GetComponent<PlayerStats>().TakeDamage(100);
         }
     }
 
