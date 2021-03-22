@@ -17,7 +17,7 @@ public class CharacterController2D : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
-
+	bool touchingGround;
 
 	[Header("Events")]
 	[Space]
@@ -44,6 +44,7 @@ public class CharacterController2D : MonoBehaviour
 		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
 		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
 		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
@@ -58,8 +59,9 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
-	public void Move(float move, float jumpForce, bool jump)
+	public void Move(float move, float jumpForce, bool jump, out bool isGrounded)
 	{
+		isGrounded = m_Grounded;
 		//only control the player if grounded or airControl is turned on
 		if (m_Grounded || m_AirControl)
 		{

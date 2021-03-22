@@ -2,37 +2,17 @@
 
 public class WaterHealObject : MonoBehaviour
 {
-	[SerializeField] WaterHeal spellData;
+	[SerializeField] WaterHeal spellStats;
 
-	private float deleteTime;
-
-	private void Awake()
+	private void Start()
 	{
 		GameObject player = GameObject.FindWithTag("Player");
 		if (player != null)
 		{
 			PlayerStats playerStats = player.GetComponent<PlayerStats>();
 
-			playerStats.CurrentHP += spellData.CalculateDamagePerInstance();
-			deleteTime = Time.time + spellData.duration;
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
-	}
-
-	// Start is called before the first frame update
-	void Start()
-	{
-
-	}
-
-	private void Update()
-	{
-		if (Time.time > deleteTime)
-		{
-			Destroy(gameObject);
+			playerStats.CurrentHP += spellStats.CalculateDamagePerInstance();
+			Destroy(gameObject, spellStats.duration);
 		}
 	}
 }

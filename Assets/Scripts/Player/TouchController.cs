@@ -17,8 +17,8 @@ public class TouchController : MonoBehaviour
 
 	float horizontalMove = 0f;
 
-
 	bool isJumping = false;
+	bool touchingGround = false;
 
 	void Awake()
 	{
@@ -28,7 +28,6 @@ public class TouchController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
 		if (joystick.Horizontal >= 0.2f)
 		{
 			horizontalMove = playerStats.Speed;
@@ -57,12 +56,19 @@ public class TouchController : MonoBehaviour
 		animator.SetBool("IsFalling", false);
 	}
 
+
 	private void FixedUpdate()
 	{
+		characterController2D.Move(horizontalMove * Time.fixedDeltaTime, playerStats.JumpPower, isJumping, out touchingGround);
+
 		if (rigidBody.velocity.y < -0.25)
 		{
 			rigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
-			animator.SetBool("IsFalling", true);
+
+			if (!touchingGround)
+				animator.SetBool("IsFalling", true);
+			else
+				animator.SetBool("IsFalling", false);
 		}
 		else if (rigidBody.velocity.y >= -0.01)
 		{
@@ -74,7 +80,6 @@ public class TouchController : MonoBehaviour
 			}
 		}
 
-		characterController2D.Move(horizontalMove * Time.fixedDeltaTime, playerStats.JumpPower, isJumping);
 		isJumping = false;
 	}
 }

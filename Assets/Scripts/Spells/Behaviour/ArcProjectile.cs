@@ -30,7 +30,7 @@ public class ArcProjectile : MonoBehaviour
 	private void Start()
 	{
 		rb.velocity = transform.up * spellStats.projectileSpeed;
-		destroyTime = Time.time + spellStats.freeFlyTime;
+		destroyTime = Time.time + spellStats.duration;
 	}
 
 

@@ -17,6 +17,7 @@ public class FireballProjectile : MonoBehaviour
 
 	private void Start()
 	{
+		Destroy(gameObject, spellStats.duration);
 		rb.velocity = transform.up * spellStats.projectileSpeed;
 	}
 

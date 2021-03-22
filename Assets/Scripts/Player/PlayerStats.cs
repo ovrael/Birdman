@@ -122,7 +122,7 @@ public class PlayerStats : MonoBehaviour
 	[SerializeField] float expNeededToLevelUp = 600;
 	[SerializeField] float currentExp = 0;
 	[SerializeField] int level = 1;
-	[SerializeField] Text levelText;
+	[SerializeField] TMP_Text levelText;
 	[SerializeField] int spellPoints = 1;
 	[SerializeField] TMP_Text spellPointsText;
 

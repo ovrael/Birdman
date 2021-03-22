@@ -11,7 +11,7 @@ public class IceCrystalSpawner : MonoBehaviour
 
 	private Rigidbody2D rb;
 	private float setUpTime;
-	private float flyDuration;
+	private float levitateDuration;
 	private float nextProjectileSpawn;
 	private bool isSetUp;
 
@@ -21,7 +21,7 @@ public class IceCrystalSpawner : MonoBehaviour
 
 		rb = GetComponent<Rigidbody2D>();
 		setUpTime = Time.time + spellStats.setUpFlyTime;
-		flyDuration = setUpTime + spellStats.duration;
+		levitateDuration = setUpTime + spellStats.duration;
 	}
 
 	private void Start()
@@ -53,7 +53,7 @@ public class IceCrystalSpawner : MonoBehaviour
 			nextProjectileSpawn = Time.time + spellStats.projectileSpawnTime;
 		}
 
-		if (Time.time > flyDuration)
+		if (Time.time > levitateDuration)
 		{
 			Destroy(gameObject);
 		}

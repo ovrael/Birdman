@@ -12,11 +12,11 @@ public class EnemyStats : MonoBehaviour
 	[SerializeField] float currentHP = 500;
 	[SerializeField] float damage = 100;
 
-	public EnemyStats(float maxHp, float damage)
-    {
+	public EnemyStats(float maxHP, float damage)
+	{
 		this.maxHP = maxHP;
 		this.damage = damage;
-    }
+	}
 
 	// Properties
 	public float MaxHp

@@ -10,7 +10,6 @@ public class SceneChanger : MonoBehaviour
 
 	private void Awake()
 	{
-		Debug.Log("I'M AWAKE --- Scene changer");
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(player);
 		foreach (GameObject savedObject in savedObjects)
