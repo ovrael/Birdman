@@ -26,8 +26,6 @@ public class SpellData : ScriptableObject
 	public string description;
 	public Sprite icon;
 
-	public GameObject prefab;
-
 	[SerializeField] int level = 0;
 	[SerializeField] int maxLevel = 20;
 

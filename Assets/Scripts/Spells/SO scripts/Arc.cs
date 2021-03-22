@@ -9,6 +9,7 @@ public class Arc : SpellData
 	[Header("Own stats")]
 	public int jumpsBetweenEnemies;
 	public float projectileSpeed;
+	public float freeFlyTime;
 	public float findEnemyRadius;
 	public float attackEnemyRadius;
 }

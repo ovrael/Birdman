@@ -10,6 +10,13 @@ public class EnemyStats : MonoBehaviour
 	// Available in Unity
 	[SerializeField] float maxHP = 500;
 	[SerializeField] float currentHP = 500;
+	[SerializeField] float damage = 100;
+
+	public EnemyStats(float maxHp, float damage)
+    {
+		this.maxHP = maxHP;
+		this.damage = damage;
+    }
 
 	// Properties
 	public float MaxHp
@@ -36,6 +43,14 @@ public class EnemyStats : MonoBehaviour
 		}
 	}
 
+	public float Damage
+	{
+		get => damage;
+		set
+		{
+			damage = value;
+		}
+	}
 
 	#endregion
 

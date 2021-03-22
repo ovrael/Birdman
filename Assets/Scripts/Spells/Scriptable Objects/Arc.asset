@@ -12,17 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c79fab4c2f283b4cb931de213a69498, type: 3}
   m_Name: Arc
   m_EditorClassIdentifier: 
-  name: Arc
+  name: 
   description: Jumping lightning
   icon: {fileID: 21300000, guid: e25496335a5b13046b1e42d031c71c1a, type: 3}
-  prefab: {fileID: 6976103783975888986, guid: 2439522f68839e841a896e3bbaee4759, type: 3}
-  level: 0
-  maxLevel: 20
+  level: 1
   manaCost: 30
   cooldown: 3
   isOnCooldown: 0
-  duration: 1
-  target: 2
+  duration: 0
+  target: 0
   damageType: 0
   minDamagePerInstance: 0
   maxDamagePerInstance: 0
@@ -31,5 +29,6 @@ MonoBehaviour:
   damageOverTimeDuration: 0
   jumpsBetweenEnemies: 20
   projectileSpeed: 6
+  freeFlyTime: 10
   findEnemyRadius: 4
   attackEnemyRadius: 0.3
