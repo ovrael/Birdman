@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
 {
 	private const int fixedUpdateRate = 50;
 
-	[SerializeField] SceneChanger sceneChanger;
+	SceneChanger sceneChanger;
 
 	[Header("God mode")]
 	[SerializeField] bool unlimitedHP;
@@ -24,14 +24,15 @@ public class PlayerStats : MonoBehaviour
 	[Header("Health")]
 
 	// Available in Unity
-	[SerializeField] Slider hpSlider;
 	[SerializeField] float maxHP = 500;
 	[SerializeField] float currentHP = 500;
 	[Tooltip("The regen is applied once per second")]
 	[SerializeField] float regenHP = 2.5f;
+	[Space]
+	[SerializeField] Slider hpSlider;
 
 	// Properties
-	public float MaxHp
+	public float MaxHP
 	{
 		get => maxHP;
 		set
@@ -72,11 +73,12 @@ public class PlayerStats : MonoBehaviour
 	[Header("Mana")]
 
 	// Available in Unity
-	[SerializeField] Slider mpSlider;
 	[SerializeField] float maxMP = 200;
 	[SerializeField] float currentMP = 200;
 	[Tooltip("The regen is applied once per second")]
 	[SerializeField] float regenMP = 1.5f;
+	[Space]
+	[SerializeField] Slider mpSlider;
 
 	// Properties
 	public float MaxMP
@@ -118,13 +120,16 @@ public class PlayerStats : MonoBehaviour
 	[Header("Experience")]
 
 	// Available in Unity
-	[SerializeField] Slider expSlider;
 	[SerializeField] float expNeededToLevelUp = 600;
 	[SerializeField] float currentExp = 0;
+	[Space]
 	[SerializeField] int level = 1;
 	[SerializeField] TMP_Text levelText;
+	[Space]
 	[SerializeField] int spellPoints = 1;
 	[SerializeField] TMP_Text spellPointsText;
+	[Space]
+	[SerializeField] Slider expSlider;
 
 	public float CurrentExp
 	{
@@ -138,9 +143,29 @@ public class PlayerStats : MonoBehaviour
 		}
 	}
 
+	public float ExpNeededToLevelUp
+	{
+		get => expNeededToLevelUp;
+		set
+		{
+			if (value > 0)
+			{
+				expNeededToLevelUp = value;
+			}
+		}
+	}
+
 	public int Level
 	{
 		get => level;
+		set
+		{
+			if (value >= 1)
+			{
+				level = value;
+				levelText.text = spellPoints.ToString();
+			}
+		}
 	}
 
 	public int SpellPoints
@@ -151,6 +176,8 @@ public class PlayerStats : MonoBehaviour
 			if (value >= 0)
 			{
 				spellPoints = value;
+				if (spellPointsText == null)
+					FindLeftPointsText();
 				spellPointsText.text = spellPoints.ToString();
 			}
 		}
@@ -166,9 +193,12 @@ public class PlayerStats : MonoBehaviour
 	void UpdateHUD()
 	{
 		expSlider.maxValue = expNeededToLevelUp;
-		hpSlider.maxValue = maxHP;
-		mpSlider.maxValue = maxMP;
+		hpSlider.maxValue = MaxHP;
+		mpSlider.maxValue = MaxMP;
 		levelText.text = level.ToString();
+
+		if (spellPointsText == null)
+			FindLeftPointsText();
 		spellPointsText.text = spellPoints.ToString();
 	}
 
@@ -180,8 +210,8 @@ public class PlayerStats : MonoBehaviour
 		currentExp -= expNeededToLevelUp;
 		expNeededToLevelUp += 50;
 
-		bool isFullHP = (currentHP >= maxHP) ? true : false;
-		bool isFullMP = (currentMP >= maxMP) ? true : false;
+		bool isFullHP = (CurrentHP >= MaxHP) ? true : false;
+		bool isFullMP = (CurrentMP >= MaxMP) ? true : false;
 
 		maxHP += 30;
 		if (isFullHP)
@@ -212,10 +242,8 @@ public class PlayerStats : MonoBehaviour
 		CurrentHP -= damageTaken;
 	}
 
-
-	private void Awake()
+	public void SetUp()
 	{
-		// Set up
 		hpSlider.minValue = 0;
 		hpSlider.maxValue = maxHP;
 		hpSlider.value = currentHP;
@@ -232,10 +260,16 @@ public class PlayerStats : MonoBehaviour
 		spellPointsText.text = spellPoints.ToString();
 	}
 
+
+	private void Awake()
+	{
+		SetUp();
+	}
+
 	// Start is called before the first frame update
 	void Start()
 	{
-		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "SceneManager").FirstOrDefault();
+		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "GameManager").FirstOrDefault();
 
 		if (sceneManager != null)
 		{
@@ -268,14 +302,34 @@ public class PlayerStats : MonoBehaviour
 		{
 			if (!cantDie)
 			{
-				Debug.LogWarning("GAME OVER");
+				SpellSystem spellSystem = transform.parent.GetComponentInChildren<SpellSystem>();
 
-				Time.timeScale = 0f;
+				DataManager.GetPlayerData(this, spellSystem);
+
+
+
+				//Time.timeScale = 0f;
 				sceneChanger.LoadGameOver();
 			}
 			else
 			{
 				currentHP = 1f;
+			}
+		}
+
+		if (spellPointsText == null)
+			FindLeftPointsText();
+	}
+
+	private void FindLeftPointsText()
+	{
+		var tmpTexts = Resources.FindObjectsOfTypeAll<TMP_Text>();
+		foreach (var text in tmpTexts)
+		{
+			if (text.name == "LeftPointsText")
+			{
+				spellPointsText = text;
+				break;
 			}
 		}
 	}

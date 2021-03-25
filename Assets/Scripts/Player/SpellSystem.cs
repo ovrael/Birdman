@@ -27,6 +27,19 @@ public class SpellSystem : MonoBehaviour
 	[Header("Spells")]
 	[SerializeField] SpellData[] spellsData;
 
+	public SpellData[] SpellsData
+	{
+		get => spellsData;
+		set
+		{
+			if (value.Length <= 3 && value.Length >= 0)
+			{
+				spellsData = value;
+				AssignSpellsToButtons();
+			}
+		}
+	}
+
 	[Header("Buttons")]
 	[SerializeField] SpellButton[] buttons;
 
@@ -34,11 +47,12 @@ public class SpellSystem : MonoBehaviour
 
 	private PlayerStats player;
 
+
 	public int AssignedSpellsCount()
 	{
 		int assigned = 0;
 
-		foreach (var item in spellsData)
+		foreach (var item in SpellsData)
 		{
 			if (item != null)
 				assigned++;
@@ -48,47 +62,47 @@ public class SpellSystem : MonoBehaviour
 
 	public void UseSpell(int spellNumber)
 	{
-		if (player.CurrentMP >= spellsData[spellNumber].manaCost && !spellsData[spellNumber].isOnCooldown)
+		if (player.CurrentMP >= SpellsData[spellNumber].manaCost && !SpellsData[spellNumber].isOnCooldown)
 		{
 			float sideRotation = (Math.Sign(player.transform.parent.transform.localScale.x) == 1) ? 180 : 0;
 			Quaternion spellRotation = Quaternion.Euler(new Vector3(0, sideRotation, 0));
 
-			if (spellsData[spellNumber].target == Target.Enemy || spellsData[spellNumber].target == Target.NoTarget)
+			if (SpellsData[spellNumber].target == Target.Enemy || SpellsData[spellNumber].target == Target.NoTarget)
 			{
-				Instantiate(spellsData[spellNumber].prefab, attackSpellSpawnPoint.position, spellRotation);
+				Instantiate(SpellsData[spellNumber].prefab, attackSpellSpawnPoint.position, spellRotation);
 			}
 
-			if (spellsData[spellNumber].target == Target.Player)
+			if (SpellsData[spellNumber].target == Target.Player)
 			{
-				Instantiate(spellsData[spellNumber].prefab, selfTargetSpellSpawnPoint.position, spellRotation, selfTargetSpellSpawnPoint);
+				Instantiate(SpellsData[spellNumber].prefab, selfTargetSpellSpawnPoint.position, spellRotation, selfTargetSpellSpawnPoint);
 			}
 
-			player.CurrentMP -= spellsData[spellNumber].manaCost;
+			player.CurrentMP -= SpellsData[spellNumber].manaCost;
 
 			if (!player.NoCooldowns)
 			{
-				spellsData[spellNumber].isOnCooldown = true;
+				SpellsData[spellNumber].isOnCooldown = true;
 				buttons[spellNumber].cooldown.value = 1;
-				nextSpellsUse[spellNumber] = Time.time + spellsData[spellNumber].cooldown;
+				nextSpellsUse[spellNumber] = Time.time + SpellsData[spellNumber].cooldown;
 			}
 		}
 	}
 
 	public void AssignSpellToButton(int buttonIndex, SpellData spell)
 	{
-		for (int i = 0; i < spellsData.Length; i++)
+		for (int i = 0; i < SpellsData.Length; i++)
 		{
-			if (spellsData[i] != null)
+			if (SpellsData[i] != null)
 			{
-				if (spellsData[i] == spell)
+				if (SpellsData[i] == spell)
 				{
-					spellsData[i] = null;
+					SpellsData[i] = null;
 					break;
 				}
 			}
 		}
 
-		spellsData[buttonIndex] = spell;
+		SpellsData[buttonIndex] = spell;
 		AssignSpellsToButtons();
 	}
 
@@ -96,10 +110,10 @@ public class SpellSystem : MonoBehaviour
 	{
 		for (int i = 0; i < buttons.Length; i++)
 		{
-			if (spellsData[i] != null)
+			if (SpellsData[i] != null)
 			{
 				buttons[i].icon.color = new Color(1, 1, 1, 1);
-				buttons[i].icon.sprite = spellsData[i].icon;
+				buttons[i].icon.sprite = SpellsData[i].icon;
 
 				int x = i;
 				buttons[x].button.onClick.RemoveAllListeners();
@@ -131,7 +145,7 @@ public class SpellSystem : MonoBehaviour
 
 	private void CheckMana(int spellIndex)
 	{
-		if (player.CurrentMP < spellsData[spellIndex].manaCost)
+		if (player.CurrentMP < SpellsData[spellIndex].manaCost)
 		{
 			buttons[spellIndex].button.interactable = false;
 			DisableImages(spellIndex);
@@ -150,12 +164,12 @@ public class SpellSystem : MonoBehaviour
 	{
 		if (Time.time > nextSpellsUse[spellIndex])
 		{
-			spellsData[spellIndex].isOnCooldown = false;
+			SpellsData[spellIndex].isOnCooldown = false;
 			buttons[spellIndex].cooldown.value = 0f;
 		}
 		else
 		{
-			buttons[spellIndex].cooldown.value = (nextSpellsUse[spellIndex] - Time.time) / spellsData[spellIndex].cooldown;
+			buttons[spellIndex].cooldown.value = (nextSpellsUse[spellIndex] - Time.time) / SpellsData[spellIndex].cooldown;
 		}
 	}
 
@@ -183,9 +197,9 @@ public class SpellSystem : MonoBehaviour
 			restart = false;
 		}
 
-		for (int i = 0; i < spellsData.Length; i++)
+		for (int i = 0; i < SpellsData.Length; i++)
 		{
-			if (spellsData[i] != null)
+			if (SpellsData[i] != null)
 			{
 				CheckMana(i);
 				CheckCooldown(i);

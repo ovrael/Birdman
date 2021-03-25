@@ -7,7 +7,7 @@ using TMPro;
 public class SpellTile : MonoBehaviour
 {
 	[Header("Utils")]
-	[SerializeField] PlayerStats player;
+	PlayerStats player;
 	[SerializeField] SpellData spell;
 	[SerializeField] Button button;
 	[SerializeField] bool resetLevel;
@@ -31,6 +31,7 @@ public class SpellTile : MonoBehaviour
 	{
 		spellLevelText.text = spell.Level.ToString();
 		button.image.sprite = spell.icon;
+		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
 	}
 
 	// Update is called once per frame
@@ -48,9 +49,10 @@ public class SpellTile : MonoBehaviour
 		if (resetLevel)
 		{
 			spell.Level = 0;
-			spellLevelText.text = spell.Level.ToString();
 			resetLevel = false;
 		}
+
+		spellLevelText.text = spell.Level.ToString();
 	}
 
 	public void LevelUpSpell()

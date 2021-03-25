@@ -4,22 +4,15 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour
 {
+	PlayerStats player;
+
 	#region Health
 	[Header("Health")]
-
-	// Available in Unity
 	[SerializeField] float maxHP = 500;
 	[SerializeField] float currentHP = 500;
-	[SerializeField] float damage = 100;
-
-	public EnemyStats(float maxHP, float damage)
-	{
-		this.maxHP = maxHP;
-		this.damage = damage;
-	}
 
 	// Properties
-	public float MaxHp
+	public float MaxHP
 	{
 		get => maxHP;
 		set
@@ -40,23 +33,45 @@ public class EnemyStats : MonoBehaviour
 			{
 				currentHP = value;
 			}
+			else
+			{
+				currentHP = maxHP;
+			}
 		}
 	}
+	#endregion
+
+	#region Damage
+	[Header("Damage")]
+	[SerializeField] float damage = 100;
 
 	public float Damage
 	{
 		get => damage;
 		set
 		{
-			damage = value;
+			if (value >= 0)
+				damage = value;
 		}
 	}
+	#endregion
+
+	#region Experience
+	[Header("Experience")]
+	[SerializeField] float experienceAfterDeath = 200;
 
 	#endregion
 
+	#region Methods
 	public void TakeDamage(float damage)
 	{
 		currentHP -= damage;
+	}
+	#endregion
+
+	private void Start()
+	{
+		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
 	}
 
 	private void Update()
@@ -64,6 +79,7 @@ public class EnemyStats : MonoBehaviour
 		if (currentHP <= 0)
 		{
 			Destroy(gameObject);
+			player.CurrentExp += experienceAfterDeath;
 		}
 	}
 }

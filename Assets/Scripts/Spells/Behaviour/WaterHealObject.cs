@@ -9,7 +9,7 @@ public class WaterHealObject : MonoBehaviour
 		GameObject player = GameObject.FindWithTag("Player");
 		if (player != null)
 		{
-			PlayerStats playerStats = player.GetComponent<PlayerStats>();
+			PlayerStats playerStats = player.GetComponentInChildren<PlayerStats>();
 
 			playerStats.CurrentHP += spellStats.CalculateDamagePerInstance();
 			Destroy(gameObject, spellStats.duration);

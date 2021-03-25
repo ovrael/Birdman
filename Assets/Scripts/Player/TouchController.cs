@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class TouchController : MonoBehaviour
 {
+	// public static TouchController Instance { get; private set; }
+
 	// VARIABLES
 	public CharacterController2D characterController2D;
 	public Animator animator;
-	public Joystick joystick;
+	public GameObject joystickGameobject;
 	public PlayerStats playerStats;
 
 	public float fallMultiplier = 2.5f;
 	public float lowJumpMultiplier = 2.0f;
 
 	Rigidbody2D rigidBody;
+	Joystick joystick;
 
 	float horizontalMove = 0f;
 
@@ -22,6 +25,18 @@ public class TouchController : MonoBehaviour
 
 	void Awake()
 	{
+		//if (Instance == null)
+		//{
+		//	Instance = this;
+		//	DontDestroyOnLoad(gameObject);
+		//}
+		//else
+		//{
+		//	Destroy(gameObject);
+		//}
+
+
+		joystick = joystickGameobject.GetComponent<Joystick>();
 		rigidBody = GetComponent<Rigidbody2D>();
 	}
 

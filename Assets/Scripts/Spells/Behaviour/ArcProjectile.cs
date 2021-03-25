@@ -48,7 +48,7 @@ public class ArcProjectile : MonoBehaviour
 		{
 			if (currentTarget != null)
 			{
-				if (Vector3.Distance(transform.position, currentTarget.position) > spellStats.attackEnemyRadius)
+				if (Vector2.Distance(transform.position, currentTarget.position) > spellStats.attackEnemyRadius)
 				{
 					FlyToCurrentTarget();
 				}
@@ -62,7 +62,6 @@ public class ArcProjectile : MonoBehaviour
 			{
 				FindNextTarget();
 			}
-
 		}
 		else
 		{
@@ -89,7 +88,7 @@ public class ArcProjectile : MonoBehaviour
 
 		for (int i = 0; i < enemies.Length; i++)
 		{
-			if (Vector3.Distance(transform.position, enemies[i].transform.position) <= spellStats.findEnemyRadius)
+			if (Vector2.Distance(transform.position, enemies[i].transform.position) <= spellStats.findEnemyRadius)
 			{
 				bool isTerrainBetween = false;
 
@@ -167,30 +166,11 @@ public class ArcProjectile : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collider)
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collider.gameObject.CompareTag("Terrain"))
+		if (collision.gameObject.CompareTag("Terrain"))
 		{
 			Destroy(gameObject);
 		}
 	}
-
-	//private void OnTriggerEnter2D(Collider2D what)
-	//{
-
-	//}
-
-	//void OnCollisionEnter2D(Collision2D collider)
-	//{
-	//	if (collider.gameObject.CompareTag("Enemy"))
-	//	{
-	//		collider.gameObject.GetComponent<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
-	//		Destroy(gameObject);
-	//	}
-
-	//	if (collider.gameObject.CompareTag("Wall"))
-	//	{
-	//		Destroy(gameObject);
-	//	}
-	//}
 }

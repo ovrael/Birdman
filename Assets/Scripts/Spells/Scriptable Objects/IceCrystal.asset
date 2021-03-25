@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a91622610173f4ea12e9b558e98859, type: 3}
   m_Name: IceCrystal
   m_EditorClassIdentifier: 
-  name: 
+  name: Ice Crystal
   description: Crystal of ice
   icon: {fileID: 21300000, guid: e3008dff153bdaa468bef103168790f5, type: 3}
   prefab: {fileID: 3728321439854146201, guid: 253825a9afef85947b343a535a57076f, type: 3}
-  level: 6
+  level: 0
   maxLevel: 20
   manaCost: 40
   cooldown: 10

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using System;
 
 public class LevelPortal : MonoBehaviour
 {
@@ -20,8 +21,6 @@ public class LevelPortal : MonoBehaviour
 		var enterBtn = Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(b => b.name == "EnterButton");
 		warningText = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(b => b.name == "SpellRequire");
 
-		//Button enterBtn = HudCanvas.GetComponentsInChildren<Button>().Where(b => b.name == "EnterButton").FirstOrDefault();
-
 		if (enterBtn != null)
 		{
 			enterButton = enterBtn;
@@ -30,7 +29,7 @@ public class LevelPortal : MonoBehaviour
 
 	private void FindSceneChanger()
 	{
-		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "SceneManager").FirstOrDefault();
+		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "GameManager").FirstOrDefault();
 
 		if (sceneManager != null)
 		{
@@ -53,8 +52,11 @@ public class LevelPortal : MonoBehaviour
 		}
 	}
 
+
+
 	private void Update()
 	{
+
 		if (sceneChanger == null)
 			FindSceneChanger();
 
@@ -68,6 +70,7 @@ public class LevelPortal : MonoBehaviour
 				buttonListenerAssigned = true;
 				enterButton.onClick.RemoveAllListeners();
 				enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
+
 			}
 		}
 	}
