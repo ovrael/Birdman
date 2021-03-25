@@ -5,13 +5,12 @@ using Pathfinding;
 
 public class FlyingEnemyBehaviour : MonoBehaviour
 {
-
     #region Public Variables
     public float attackDistance; //Minimum distance for attack
     public float timer; //Timer for cooldown between attacks
     public Transform target;
     [HideInInspector] public bool inRange; //Check if  is in range
-    public Collider2D targetCollider;
+    public CapsuleCollider2D targetCollider;
     public BoxCollider2D hitBox;
     public AIPath aiPath;
     #endregion
@@ -25,6 +24,10 @@ public class FlyingEnemyBehaviour : MonoBehaviour
 
     void Awake()
     {
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        AIDestinationSetter AIDestinationSetter = GetComponent<AIDestinationSetter>();
+        AIDestinationSetter.target = target;
+        targetCollider = target.GetComponentInChildren<CapsuleCollider2D>();
         intTimer = timer; //Store the inital value of timer
     }
 
@@ -54,8 +57,9 @@ public class FlyingEnemyBehaviour : MonoBehaviour
         {
             if (hitBox.IsTouching(targetCollider))
             {
-                //float damage = gameObject.GetComponent<EnemyStats>().Damage;
-                target.gameObject.GetComponent<PlayerStats>().TakeDamage(100);
+                float damage = GetComponent<EnemyStats>().Damage;
+                target.GetComponentInChildren<PlayerStats>().TakeDamage(damage);
+                cooling = true;
                 Debug.LogWarning("damage jebany furrasie!");
             }
         }

@@ -13,7 +13,7 @@ public class EnemyBehaviour : MonoBehaviour
     public Transform rightLimit;
     [HideInInspector] public Transform target;
     [HideInInspector] public bool inRange; //Check if  is in range
-    public Collider2D targetCollider;
+    public CapsuleCollider2D targetCollider;
     public BoxCollider2D hitBox;
     public GameObject hotZone;
     public GameObject triggerArea;
@@ -29,6 +29,18 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Awake()
     {
+        //handling right and left limit
+        GameObject leftGO = new GameObject();
+        GameObject rightGO = new GameObject();
+        leftGO.transform.position = new Vector3(gameObject.transform.position.x - 10.0f, gameObject.transform.position.y, gameObject.transform.position.z);
+        rightGO.transform.position = new Vector3(gameObject.transform.position.x + 10.0f, gameObject.transform.position.y, gameObject.transform.position.z);
+        
+        leftLimit = leftGO.transform;
+        rightLimit = rightGO.transform;
+
+        //setting target
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        targetCollider = target.GetComponentInChildren<CapsuleCollider2D>();
         SelectTarget();
         intTimer = timer; //Store the inital value of timer
         anim = GetComponent<Animator>();
@@ -95,8 +107,10 @@ public class EnemyBehaviour : MonoBehaviour
         if (hitBox.IsTouching(targetCollider))
         {
             //we have to get the damage stats from enemy but this line is not working
-            //float damage = gameObject.GetComponent<EnemyStats>().Damage;
-            target.gameObject.GetComponent<PlayerStats>().TakeDamage(100);
+            float damage = GetComponent<EnemyStats>().Damage;
+            target.GetComponentInChildren<PlayerStats>().TakeDamage(damage);
+            cooling = true;
+            Debug.LogWarning(damage);
         }
     }
 
