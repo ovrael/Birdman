@@ -44,9 +44,21 @@ TagManager:
   - 
   - Enemy
   m_SortingLayers:
+  - name: Background
+    uniqueID: 4248163133
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Objects
+    uniqueID: 3046194099
+    locked: 0
+  - name: Enemies
+    uniqueID: 569372929
+    locked: 0
   - name: Spells
     uniqueID: 3527724599
+    locked: 0
+  - name: Player
+    uniqueID: 1758572147
     locked: 0

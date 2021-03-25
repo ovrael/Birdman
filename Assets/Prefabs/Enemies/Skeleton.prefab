@@ -218,11 +218,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b43e09ddaae15d4e846f3847dca15fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmos: 1
   attackDistance: 1.5
   moveSpeed: 2
   timer: 1
   leftLimit: {fileID: 0}
+  leftLimitDistance: 10
   rightLimit: {fileID: 0}
+  rightLimitDistance: 10
   target: {fileID: 0}
   inRange: 0
   targetCollider: {fileID: 0}
@@ -244,6 +247,7 @@ MonoBehaviour:
   maxHP: 500
   currentHP: 500
   damage: 10
+  experienceAfterDeath: 200
 --- !u!1 &6861005185443785021
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,9 +442,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 569372929
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 7928858964255100155, guid: bc5e6220e5eb4494f831d5d5611a7e52,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

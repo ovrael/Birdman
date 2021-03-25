@@ -5,187 +5,203 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    #region Public Variables
-    public float attackDistance; //Minimum distance for attack
-    public float moveSpeed;
-    public float timer; //Timer for cooldown between attacks
-    public Transform leftLimit;
-    public Transform rightLimit;
-    [HideInInspector] public Transform target;
-    [HideInInspector] public bool inRange; //Check if  is in range
-    public CapsuleCollider2D targetCollider;
-    public BoxCollider2D hitBox;
-    public GameObject hotZone;
-    public GameObject triggerArea;
-    #endregion
+	#region Public Variables
+	[SerializeField] bool drawGizmos = true;
 
-    #region Private Variables
-    private Animator anim;
-    private float distance; //Store the distance b/w enemy and 
-    private bool attackMode;
-    private bool cooling; //Check if Enemy is cooling after attack
-    private float intTimer;
-    #endregion
+	public float attackDistance; //Minimum distance for attack
+	public float moveSpeed;
+	public float timer; //Timer for cooldown between attacks
+	[HideInInspector] public Transform leftLimit;
+	[SerializeField] float leftLimitDistance = 10f;
+	[HideInInspector] public Transform rightLimit;
+	[SerializeField] float rightLimitDistance = 10f;
+	[HideInInspector] public Transform target;
+	[HideInInspector] public bool inRange; //Check if  is in range
+	[HideInInspector] public CapsuleCollider2D targetCollider;
+	public BoxCollider2D hitBox;
+	public GameObject hotZone;
+	public GameObject triggerArea;
+	#endregion
 
-    void Awake()
-    {
-        //handling right and left limit
-        GameObject leftGO = new GameObject();
-        GameObject rightGO = new GameObject();
-        leftGO.transform.position = new Vector3(gameObject.transform.position.x - 10.0f, gameObject.transform.position.y, gameObject.transform.position.z);
-        rightGO.transform.position = new Vector3(gameObject.transform.position.x + 10.0f, gameObject.transform.position.y, gameObject.transform.position.z);
-        
-        leftLimit = leftGO.transform;
-        rightLimit = rightGO.transform;
+	#region Private Variables
+	private Animator anim;
+	private float distance; //Store the distance b/w enemy and 
+	private bool attackMode;
+	private bool cooling; //Check if Enemy is cooling after attack
+	private float intTimer;
+	#endregion
 
-        //setting target
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        targetCollider = target.GetComponentInChildren<CapsuleCollider2D>();
-        SelectTarget();
-        intTimer = timer; //Store the inital value of timer
-        anim = GetComponent<Animator>();
-    }
+	void Awake()
+	{
+		//handling right and left limit
+		GameObject leftGO = new GameObject();
+		GameObject rightGO = new GameObject();
+		leftGO.transform.position = new Vector3(gameObject.transform.position.x - leftLimitDistance, gameObject.transform.position.y, gameObject.transform.position.z);
+		rightGO.transform.position = new Vector3(gameObject.transform.position.x + rightLimitDistance, gameObject.transform.position.y, gameObject.transform.position.z);
 
-    void Update()
-    {
-        if (!attackMode)
-        {
-            Move();
-        }
+		leftLimit = leftGO.transform;
+		rightLimit = rightGO.transform;
 
-        if (!InsideOfLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
-        {
-            SelectTarget();
-        }
+		//setting target
+		target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+		targetCollider = target.GetComponentInChildren<CapsuleCollider2D>();
+		SelectTarget();
+		intTimer = timer; //Store the inital value of timer
+		anim = GetComponent<Animator>();
+	}
 
-        if (inRange)
-        {
-            EnemyLogic();
-        }
-    }
+	void Update()
+	{
+		if (!attackMode)
+		{
+			Move();
+		}
 
-    void EnemyLogic()
-    {
-        distance = Vector2.Distance(transform.position, target.position);
+		if (!InsideOfLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
+		{
+			SelectTarget();
+		}
 
-        if (distance > attackDistance)
-        {
-            StopAttack();
-        }
-        else if (attackDistance >= distance && cooling == false)
-        {
-            Attack();
-        }
+		if (inRange)
+		{
+			EnemyLogic();
+		}
+	}
 
-        if (cooling)
-        {
-            Cooldown();
-            anim.SetBool("Attack", false);
-        }
-    }
+	void EnemyLogic()
+	{
+		distance = Vector2.Distance(transform.position, target.position);
 
-    void Move()
-    {
-        anim.SetBool("canWalk", true);
+		if (distance > attackDistance)
+		{
+			StopAttack();
+		}
+		else if (attackDistance >= distance && cooling == false)
+		{
+			Attack();
+		}
 
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
-        {
-            Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
+		if (cooling)
+		{
+			Cooldown();
+			anim.SetBool("Attack", false);
+		}
+	}
 
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        }
-    }
+	void Move()
+	{
+		anim.SetBool("canWalk", true);
 
-    void Attack()
-    {
-        timer = intTimer; //Reset Timer when  enter Attack Range
-        attackMode = true; //To check if Enemy can still attack or not
+		if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
+		{
+			Vector2 targetPosition = new Vector2(target.position.x, transform.position.y);
 
-        anim.SetBool("canWalk", false);
-        anim.SetBool("Attack", true);
+			transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+		}
+	}
 
-        if (hitBox.IsTouching(targetCollider))
-        {
-            //we have to get the damage stats from enemy but this line is not working
-            float damage = GetComponent<EnemyStats>().Damage;
-            target.GetComponentInChildren<PlayerStats>().TakeDamage(damage);
-            cooling = true;
-            Debug.LogWarning(damage);
-        }
-    }
+	void Attack()
+	{
+		timer = intTimer; //Reset Timer when  enter Attack Range
+		attackMode = true; //To check if Enemy can still attack or not
 
-    void Cooldown()
-    {
-        timer -= Time.deltaTime;
+		anim.SetBool("canWalk", false);
+		anim.SetBool("Attack", true);
 
-        if (timer <= 0 && cooling && attackMode)
-        {
-            cooling = false;
-            timer = intTimer;
-        }
-    }
+		if (hitBox.IsTouching(targetCollider))
+		{
+			//we have to get the damage stats from enemy but this line is not working
+			float damage = GetComponent<EnemyStats>().Damage;
+			target.GetComponentInChildren<PlayerStats>().TakeDamage(damage);
+			cooling = true;
+			Debug.LogWarning(damage);
+		}
+	}
 
-    void StopAttack()
-    {
-        cooling = false;
-        attackMode = false;
-        anim.SetBool("Attack", false);
-    }
+	void Cooldown()
+	{
+		timer -= Time.deltaTime;
 
-    public void TriggerCooling()
-    {
-        cooling = true;
-    }
+		if (timer <= 0 && cooling && attackMode)
+		{
+			cooling = false;
+			timer = intTimer;
+		}
+	}
 
-    private bool InsideOfLimits()
-    {
-        return transform.position.x > leftLimit.position.x && transform.position.x < rightLimit.position.x;
-    }
+	void StopAttack()
+	{
+		cooling = false;
+		attackMode = false;
+		anim.SetBool("Attack", false);
+	}
 
-    public void SelectTarget()
-    {
-        float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
-        float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
+	public void TriggerCooling()
+	{
+		cooling = true;
+	}
 
-        if (distanceToLeft > distanceToRight)
-        {
-            target = leftLimit;
-        }
-        else
-        {
-            target = rightLimit;
-        }
+	private bool InsideOfLimits()
+	{
+		return transform.position.x > leftLimit.position.x && transform.position.x < rightLimit.position.x;
+	}
 
-        //Ternary Operator
-        //target = distanceToLeft > distanceToRight ? leftLimit : rightLimit;
+	public void SelectTarget()
+	{
+		float distanceToLeft = Vector2.Distance(transform.position, leftLimit.position);
+		float distanceToRight = Vector2.Distance(transform.position, rightLimit.position);
 
-        Flip();
-    }
+		if (distanceToLeft > distanceToRight)
+		{
+			target = leftLimit;
+		}
+		else
+		{
+			target = rightLimit;
+		}
 
-    public void Flip()
-    {
-    
-        if (transform.position.x > target.position.x)
-        {
-            transform.localScale = new Vector3(-1f, 1f, 1f);
-        }
-        else
-        {
-            transform.localScale = new Vector3(1f, 1f, 1f);
-        }
+		//Ternary Operator
+		//target = distanceToLeft > distanceToRight ? leftLimit : rightLimit;
 
-        //Ternary Operator
-        //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
+		Flip();
+	}
 
-    }
+	public void Flip()
+	{
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (target.CompareTag("Player"))
-    //    {
-         
-    //        else Debug.LogWarning("nie dzisiaj");
-    //    }
-    //}
+		if (transform.position.x > target.position.x)
+		{
+			transform.localScale = new Vector3(-1f, 1f, 1f);
+		}
+		else
+		{
+			transform.localScale = new Vector3(1f, 1f, 1f);
+		}
+
+		//Ternary Operator
+		//rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
+
+	}
+
+	private void OnDrawGizmos()
+	{
+		if (drawGizmos)
+		{
+			// Draws a blue line from this transform to the target
+			Vector3 bias = new Vector3(0, 1, 0);
+			Gizmos.color = Color.red;
+			Gizmos.DrawLine(leftLimit.position - bias, leftLimit.position + bias);
+			Gizmos.DrawLine(rightLimit.position - bias, rightLimit.position + bias);
+		}
+	}
+
+	//private void OnCollisionEnter2D(Collision2D collision)
+	//{
+	//    if (target.CompareTag("Player"))
+	//    {
+
+	//        else Debug.LogWarning("nie dzisiaj");
+	//    }
+	//}
 }
 

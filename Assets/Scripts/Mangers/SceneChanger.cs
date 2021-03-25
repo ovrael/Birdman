@@ -22,34 +22,54 @@ public class SceneChanger : MonoBehaviour
 			DontDestroyOnLoad(savedObject);
 			i++;
 		}
-	}
 
-	private void SpawnSavedObjects()
-	{
-		Transform spawnPoint = GameObject.FindGameObjectWithTag("Spawn").transform;
-		player.transform.position = spawnPoint.position;
+		MovePlayerToSpawn();
 	}
 
 	public void LoadSceneByName(string sceneName)
 	{
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+
 		SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 
 		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
+	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+	{
+		MovePlayerToSpawn();
+	}
 
+	private void MovePlayerToSpawn()
+	{
+		if (SceneManager.GetActiveScene().name != "GameOver")
+		{
+			Transform spawnPoint = GameObject.FindGameObjectWithTag("Spawn").transform;
+			player.transform.position = spawnPoint.position;
+		}
+	}
+
+	public void LoadMenu()
+	{
+		SceneManager.LoadScene("Menu");
+		SceneManager.sceneLoaded += OnMenuLoaded;
+	}
+
+	private void OnMenuLoaded(Scene arg0, LoadSceneMode arg1)
+	{
+		RestartGame();
+	}
 	private void RestartGame()
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
-
-		DataManager.AssignPlayerStats(player);
-		DataManager.AssignPlayerSpellSystem(player);
-
-
 		GameObject[] dontDestroyObjects = GetDontDestroyOnLoadObjects();
-
 		int i = 0;
 		foreach (var undestroy in dontDestroyObjects)
 		{
+			if (undestroy.name == "Player")
+			{
+				player = undestroy;
+				continue;
+			}
+
 			foreach (var savedName in savedNames)
 			{
 				if (undestroy.name == savedName)
@@ -58,24 +78,15 @@ public class SceneChanger : MonoBehaviour
 					i++;
 					break;
 				}
+
 			}
 		}
-	}
+		MovePlayerToSpawn();
 
-	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-	{
-		SpawnSavedObjects();
-	}
+		DataManager.AssignPlayerStats(player);
+		DataManager.AssignPlayerSpellSystem(player);
 
-	private void OnMenuLoaded(Scene arg0, LoadSceneMode arg1)
-	{
-		RestartGame();
-	}
 
-	public void LoadMenu()
-	{
-		SceneManager.LoadScene("Menu");
-		SceneManager.sceneLoaded += OnMenuLoaded;
 	}
 
 	public void LoadGameOver()

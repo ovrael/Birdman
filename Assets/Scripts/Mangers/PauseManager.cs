@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class PauseManager : MonoBehaviour
@@ -61,16 +62,20 @@ public class PauseManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (pauseButton == null)
+		if (SceneManager.GetActiveScene().name != "GameOver")
 		{
-			FindPauseButton();
-			AssignPauseButton();
-		}
 
-		if (resumeButton == null)
-		{
-			FindResumeButton();
-			AssignResumeButton();
+			if (pauseButton == null)
+			{
+				FindPauseButton();
+				AssignPauseButton();
+			}
+
+			if (resumeButton == null)
+			{
+				FindResumeButton();
+				AssignResumeButton();
+			}
 		}
 
 		Time.timeScale = timeSpeed;
