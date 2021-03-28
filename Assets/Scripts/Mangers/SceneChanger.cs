@@ -1,17 +1,25 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
+	[Header("Save objects")]
 	[SerializeField] GameObject player;
 	[SerializeField] GameObject[] savedObjects;
-
 	string[] savedNames;
+
+	[Header("Transition")]
+	[SerializeField] GameObject loadingCanvas;
+	[SerializeField] float transitionTime = 1f;
+	Animator transition;
+
 
 	private void Awake()
 	{
+		loadingCanvas.SetActive(true);
+		transition = loadingCanvas.GetComponentInChildren<Animator>();
+
 		savedNames = new string[savedObjects.Length];
 
 		DontDestroyOnLoad(player);
@@ -26,14 +34,27 @@ public class SceneChanger : MonoBehaviour
 		MovePlayerToSpawn();
 	}
 
+
 	public void LoadSceneByName(string sceneName)
 	{
+		StartCoroutine(LoadSceneByNameCoroutine(sceneName));
+	}
+
+	IEnumerator LoadSceneByNameCoroutine(string sceneName)
+	{
+		transition.SetTrigger("Start");
+		yield return new WaitForSeconds(transitionTime);
+
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 
 		SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 
 		SceneManager.sceneLoaded += OnSceneLoaded;
+
+		yield return new WaitForSeconds(transitionTime);
+		transition.SetTrigger("End");
 	}
+
 	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 	{
 		MovePlayerToSpawn();

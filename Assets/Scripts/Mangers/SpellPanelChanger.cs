@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class BoolPanels
@@ -20,6 +21,12 @@ public class SpellPanelChanger : MonoBehaviour
 		{
 			panel.panelName = panel.spellPanel.name;
 		}
+	}
+
+	public void MakeButtonPressed(Button button)
+	{
+		button.onClick.Invoke();
+		button.Select();
 	}
 
 	public void ShowSpellPanelByName(string panelName)

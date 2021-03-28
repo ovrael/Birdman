@@ -36,6 +36,8 @@ public class DataManager : MonoBehaviour
 		oldPlayerStats.Level = playerStats.Level;
 		oldPlayerStats.SpellPoints = playerStats.SpellPoints;
 
+		oldPlayerStats.PercentageDamageReduction = playerStats.PercentageDamageReduction;
+
 		oldPlayerStats.SetUp();
 	}
 }

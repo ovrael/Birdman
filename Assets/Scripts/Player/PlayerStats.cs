@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, ITakeDamage
 {
 	private const int fixedUpdateRate = 50;
 
@@ -120,8 +120,8 @@ public class PlayerStats : MonoBehaviour
 	[Header("Experience")]
 
 	// Available in Unity
-	[SerializeField] float expNeededToLevelUp = 600;
-	[SerializeField] float currentExp = 0;
+	[SerializeField] int expNeededToLevelUp = 600;
+	[SerializeField] int currentExp = 0;
 	[Space]
 	[SerializeField] int level = 1;
 	[SerializeField] TMP_Text levelText;
@@ -131,7 +131,7 @@ public class PlayerStats : MonoBehaviour
 	[Space]
 	[SerializeField] Slider expSlider;
 
-	public float CurrentExp
+	public int CurrentExp
 	{
 		get => currentExp;
 		set
@@ -143,7 +143,7 @@ public class PlayerStats : MonoBehaviour
 		}
 	}
 
-	public float ExpNeededToLevelUp
+	public int ExpNeededToLevelUp
 	{
 		get => expNeededToLevelUp;
 		set
@@ -202,13 +202,22 @@ public class PlayerStats : MonoBehaviour
 		spellPointsText.text = spellPoints.ToString();
 	}
 
+	void CalcNeededExperienceToLevelUp()
+	{
+		int a = 5;
+		int b = 10;
+		int c = 485;
+
+		expNeededToLevelUp = a * Level * Level + b * Level + c;
+	}
+
 	void UpdateStats()
 	{
-		level++;
-		spellPoints++;
+		Level++;
+		SpellPoints++;
 
 		currentExp -= expNeededToLevelUp;
-		expNeededToLevelUp += 50;
+		CalcNeededExperienceToLevelUp();
 
 		bool isFullHP = (CurrentHP >= MaxHP) ? true : false;
 		bool isFullMP = (CurrentMP >= MaxMP) ? true : false;
@@ -237,10 +246,33 @@ public class PlayerStats : MonoBehaviour
 
 	#endregion
 
+	#region Taking Damage
+	[Header("Taking Damage")]
+
+	[Tooltip("If value is below zero, object takes increased damage")]
+	[SerializeField] float percentageDamageReduction = 0;
+
+	public float PercentageDamageReduction
+	{
+		get => percentageDamageReduction;
+		set
+		{
+			if (value > 100)
+				percentageDamageReduction = 100;
+			else
+				percentageDamageReduction = value;
+		}
+
+	}
+
 	public void TakeDamage(float damageTaken)
 	{
-		CurrentHP -= damageTaken;
+		float damageAfterReduction = ((100f - percentageDamageReduction) / 100) * damageTaken;
+		CurrentHP -= damageAfterReduction;
 	}
+
+	#endregion
+
 
 	public void SetUp()
 	{
@@ -252,6 +284,7 @@ public class PlayerStats : MonoBehaviour
 		mpSlider.maxValue = maxMP;
 		mpSlider.value = currentMP;
 
+		CalcNeededExperienceToLevelUp();
 		expSlider.minValue = 0;
 		expSlider.maxValue = expNeededToLevelUp;
 		expSlider.value = currentExp;
@@ -263,7 +296,6 @@ public class PlayerStats : MonoBehaviour
 
 	private void Awake()
 	{
-		SetUp();
 	}
 
 	// Start is called before the first frame update
@@ -275,6 +307,8 @@ public class PlayerStats : MonoBehaviour
 		{
 			sceneChanger = sceneManager.GetComponent<SceneChanger>();
 		}
+
+		SetUp();
 	}
 
 	private void Update()
