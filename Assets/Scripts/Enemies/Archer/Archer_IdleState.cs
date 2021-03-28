@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archer_IdleState : MonoBehaviour
+public class Archer_IdleState : IdleState
 {
-    // Start is called before the first frame update
-    void Start()
+    private Archer archer;
+    public Archer_IdleState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_IdleState stateData, Archer archer): base(entity, stateMachine, animBoolName, stateData)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.archer = archer;
     }
 }

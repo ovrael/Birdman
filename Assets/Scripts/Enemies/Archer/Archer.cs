@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archer : MonoBehaviour
+public class Archer : Entity
 {
-    // Start is called before the first frame update
-    void Start()
+    public Archer_MoveState moveState { get; private set; }
+    public Archer_IdleState idleState { get; private set; }
+
+    [SerializeField]
+    private D_MoveState moveStateData;
+
+    [SerializeField]
+    private D_IdleState idleStateData;
+
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
