@@ -25,7 +25,7 @@ public class PauseManager : MonoBehaviour
 		FindResumeButton();
 		AssignResumeButton();
 
-		ResumeGame();
+		// ResumeGame();
 	}
 
 	public void ResumeGame()

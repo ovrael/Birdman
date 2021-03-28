@@ -58,7 +58,7 @@ public class EnemyStats : MonoBehaviour
 
 	#region Experience
 	[Header("Experience")]
-	[SerializeField] float experienceAfterDeath = 200;
+	[SerializeField] int experienceAfterDeath = 200;
 
 	#endregion
 

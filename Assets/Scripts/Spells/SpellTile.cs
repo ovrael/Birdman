@@ -29,9 +29,16 @@ public class SpellTile : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
+
+		if (player.Level < requiedLevel)
+		{
+			spell.Level = 0;
+		}
+
+
 		spellLevelText.text = spell.Level.ToString();
 		button.image.sprite = spell.icon;
-		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
 	}
 
 	// Update is called once per frame

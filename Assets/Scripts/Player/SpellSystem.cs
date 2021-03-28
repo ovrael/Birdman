@@ -40,6 +40,14 @@ public class SpellSystem : MonoBehaviour
 		}
 	}
 
+	public void ShowSpellNames()
+	{
+		for (int i = 0; i < spellsData.Length; i++)
+		{
+			Debug.LogWarning("Spell " + i + " name is: " + spellsData[i].name);
+		}
+	}
+
 	[Header("Buttons")]
 	[SerializeField] SpellButton[] buttons;
 
@@ -175,7 +183,6 @@ public class SpellSystem : MonoBehaviour
 
 	private void Awake()
 	{
-
 		restart = false;
 		player = transform.parent.GetComponentInChildren<PlayerStats>();
 		nextSpellsUse = new float[3];

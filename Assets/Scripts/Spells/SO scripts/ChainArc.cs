@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Spell", menuName = "Spells/Arc")]
+[CreateAssetMenu(fileName = "New Spell", menuName = "Spells/ChainArc")]
 
-public class Arc : SpellData
+public class ChainArc : SpellData
 {
 	[Header("Own stats")]
 	public int jumpsBetweenEnemies;

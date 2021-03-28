@@ -11,9 +11,9 @@ public class EnemyBehaviour : MonoBehaviour
 	public float attackDistance; //Minimum distance for attack
 	public float moveSpeed;
 	public float timer; //Timer for cooldown between attacks
-	[HideInInspector] public Transform leftLimit;
+	Transform leftLimit;
 	[SerializeField] float leftLimitDistance = 10f;
-	[HideInInspector] public Transform rightLimit;
+	Transform rightLimit;
 	[SerializeField] float rightLimitDistance = 10f;
 	[HideInInspector] public Transform target;
 	[HideInInspector] public bool inRange; //Check if  is in range

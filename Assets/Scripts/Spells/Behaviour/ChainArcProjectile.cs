@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArcProjectile : MonoBehaviour
+public class ChainArcProjectile : MonoBehaviour
 {
-	[SerializeField] Arc spellStats;
+	[SerializeField] ChainArc spellStats;
 	[SerializeField] bool drawAttackRange;
 	[SerializeField] bool drawFindRange;
 
