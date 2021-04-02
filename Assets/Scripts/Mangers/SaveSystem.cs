@@ -8,7 +8,9 @@ public static class SaveSystem
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		string path = Application.persistentDataPath + "/PlayerData.info";
-		FileStream fileStream = new FileStream(path, FileMode.Create);
+		FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate,
+									   FileAccess.ReadWrite,
+									   FileShare.None);
 
 		SavePlayerData playerData = new SavePlayerData(playerStats, spellSystem);
 

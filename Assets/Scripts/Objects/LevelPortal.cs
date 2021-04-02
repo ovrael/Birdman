@@ -90,7 +90,7 @@ public class LevelPortal : MonoBehaviour
 	{
 		if (collision.CompareTag("Player"))
 		{
-			if (collision.gameObject.GetComponentInChildren<SpellSystem>().AssignedSpellsCount() == 3)
+			if (collision.gameObject.GetComponentInChildren<SpellSystem>().AssignedSpellsCount() > 0)
 			{
 				enterButton.gameObject.SetActive(true);
 			}
