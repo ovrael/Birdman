@@ -21,9 +21,9 @@ public class IceProjectile : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D collider)
 	{
-		if (collider.gameObject.CompareTag("Enemy"))
+		if (collider.gameObject.CompareTag("EnemyObject"))
 		{
-			collider.gameObject.GetComponent<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
+			collider.gameObject.GetComponentInChildren<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
 			Destroy(gameObject);
 		}
 

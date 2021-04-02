@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public enum SpellDamageType
@@ -7,7 +8,6 @@ public enum SpellDamageType
 	Lightning = 0,
 	Fire = 1,
 	Water = 2,
-	Ice = 3,
 	Heal = 11
 }
 
@@ -23,7 +23,8 @@ public class SpellData : ScriptableObject
 {
 	[Header("Description")]
 	public new string name;
-	public string description;
+	[TextArea] public string description;
+	public string createdDescription;
 	public Sprite icon;
 
 	public GameObject prefab;
@@ -48,32 +49,64 @@ public class SpellData : ScriptableObject
 		get => maxLevel;
 	}
 
-	public float manaCost;
+	public Stat manaCost;
 
 	[Header("Time")]
-	public float cooldown;
+	public Stat cooldown;
 	public bool isOnCooldown;
-	public float duration = 0f;
+	public Stat duration;
 
 	[Header("Damage")]
 	public Target target;
 	public SpellDamageType damageType;
+	public Stat minDamagePerInstance;
+	public Stat maxDamagePerInstance;
 
-	public float minDamagePerInstance; // If spell does damage overtime it will do x times that damage
-	public float maxDamagePerInstance;
+	[Header("Level up income")]
+	public float moreManaCost;
+	public float moreDuration;
+	public float moreMinDamage;
+	public float moreMaxDamage;
 
-	[Header("Damage over time")]
-	public bool isDamageOverTime = false;
-	public float timeBetweenDamageInstances = 0f;
-	public float damageOverTimeDuration = 0f;
 
 	public float CalculateDamagePerInstance()
 	{
-		return Random.Range(minDamagePerInstance, maxDamagePerInstance);
+		return Random.Range(minDamagePerInstance.CalculatedValue, maxDamagePerInstance.CalculatedValue);
 	}
 
-	public void LevelUp()
+	public virtual void LevelUp()
 	{
+		manaCost += new Stat(moreManaCost);
+		duration += new Stat(moreDuration);
+		minDamagePerInstance += new Stat(moreMinDamage);
+		maxDamagePerInstance += new Stat(moreMaxDamage);
 		Level++;
+
+		CreateDescription();
+	}
+
+	public virtual void CreateDescription()
+	{
+		StringBuilder info = new StringBuilder();
+		info.Append("Deals ");
+		info.Append(minDamagePerInstance.CalculatedValue.ToString("0.00"));
+		info.Append(" to ");
+		info.Append(maxDamagePerInstance.CalculatedValue.ToString("0.00"));
+		info.Append(" damage. ");
+
+		createdDescription = info.ToString();
+	}
+
+	public void ResetSpellPassives()
+	{
+		cooldown = new Stat(cooldown.BaseValue);
+		duration = new Stat(duration.BaseValue);
+		minDamagePerInstance = new Stat(minDamagePerInstance.BaseValue);
+		maxDamagePerInstance = new Stat(maxDamagePerInstance.BaseValue);
+	}
+
+	public void ResetSpellLevel()
+	{
+		level = 0;
 	}
 }

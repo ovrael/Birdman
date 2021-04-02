@@ -13,22 +13,44 @@ MonoBehaviour:
   m_Name: FireBomb
   m_EditorClassIdentifier: 
   name: Firebomb
-  description: 
+  description: Bomg that explodes after 2 seconds duration.
   icon: {fileID: 21300000, guid: a5a5c8aaeec23544f8370bee36c0b68f, type: 3}
   prefab: {fileID: 6788851858732034970, guid: f57b7947e6925b74da38c6edca332132, type: 3}
-  level: 4
+  level: 0
   maxLevel: 20
-  manaCost: 40
-  cooldown: 5
+  manaCost:
+    calculatedValue: 60
+    baseValue: 60
+    flatIncome: 0
+    percentIncome: 0
+  cooldown:
+    calculatedValue: 5.5
+    baseValue: 5.5
+    flatIncome: 0
+    percentIncome: 0
   isOnCooldown: 0
-  duration: 2
+  duration:
+    calculatedValue: 2
+    baseValue: 2
+    flatIncome: 0
+    percentIncome: 0
   target: 1
   damageType: 1
-  minDamagePerInstance: 35
-  maxDamagePerInstance: 60
-  isDamageOverTime: 0
-  timeBetweenDamageInstances: 0
-  damageOverTimeDuration: 0
+  minDamagePerInstance:
+    calculatedValue: 180
+    baseValue: 180
+    flatIncome: 0
+    percentIncome: 0
+  maxDamagePerInstance:
+    calculatedValue: 210
+    baseValue: 210
+    flatIncome: 0
+    percentIncome: 0
+  moreManaCost: 0
+  moreDuration: 0
+  moreMinDamage: 0
+  moreMaxDamage: 0
   startExplosionRadius: 0.01
   endExplosionRadius: 5
   explosionDuration: 4
+  moreEndExplosionRadius: 0

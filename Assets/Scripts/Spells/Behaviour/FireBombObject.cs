@@ -11,7 +11,7 @@ public class FireBombObject : MonoBehaviour
 
 	private void Start()
 	{
-		destroyTime = Time.time + spellStats.duration;
+		destroyTime = Time.time + spellStats.duration.CalculatedValue;
 	}
 
 	private void Update()

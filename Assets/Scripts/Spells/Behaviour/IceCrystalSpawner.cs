@@ -21,7 +21,7 @@ public class IceCrystalSpawner : MonoBehaviour
 
 		rb = GetComponent<Rigidbody2D>();
 		setUpTime = Time.time + spellStats.setUpFlyTime;
-		levitateDuration = setUpTime + spellStats.duration;
+		levitateDuration = setUpTime + spellStats.duration.CalculatedValue;
 	}
 
 	private void Start()

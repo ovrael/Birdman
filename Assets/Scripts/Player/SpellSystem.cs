@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SpellButton
+public struct SpellButton
 {
 	public Image icon;
 	public Image background;
@@ -13,7 +13,6 @@ public class SpellButton
 	public Button button;
 	public Slider cooldown;
 }
-
 
 public class SpellSystem : MonoBehaviour
 {
@@ -70,7 +69,7 @@ public class SpellSystem : MonoBehaviour
 
 	public void UseSpell(int spellNumber)
 	{
-		if (player.CurrentMP >= SpellsData[spellNumber].manaCost && !SpellsData[spellNumber].isOnCooldown)
+		if (player.CurrentMP >= SpellsData[spellNumber].manaCost.CalculatedValue && !SpellsData[spellNumber].isOnCooldown)
 		{
 			float sideRotation = (Math.Sign(player.transform.parent.transform.localScale.x) == 1) ? 180 : 0;
 			Quaternion spellRotation = Quaternion.Euler(new Vector3(0, sideRotation, 0));
@@ -85,13 +84,13 @@ public class SpellSystem : MonoBehaviour
 				Instantiate(SpellsData[spellNumber].prefab, selfTargetSpellSpawnPoint.position, spellRotation, selfTargetSpellSpawnPoint);
 			}
 
-			player.CurrentMP -= SpellsData[spellNumber].manaCost;
+			player.CurrentMP -= SpellsData[spellNumber].manaCost.CalculatedValue;
 
 			if (!player.NoCooldowns)
 			{
 				SpellsData[spellNumber].isOnCooldown = true;
 				buttons[spellNumber].cooldown.value = 1;
-				nextSpellsUse[spellNumber] = Time.time + SpellsData[spellNumber].cooldown;
+				nextSpellsUse[spellNumber] = Time.time + SpellsData[spellNumber].cooldown.CalculatedValue;
 			}
 		}
 	}
@@ -153,7 +152,7 @@ public class SpellSystem : MonoBehaviour
 
 	private void CheckMana(int spellIndex)
 	{
-		if (player.CurrentMP < SpellsData[spellIndex].manaCost)
+		if (player.CurrentMP < SpellsData[spellIndex].manaCost.CalculatedValue)
 		{
 			buttons[spellIndex].button.interactable = false;
 			DisableImages(spellIndex);
@@ -177,7 +176,7 @@ public class SpellSystem : MonoBehaviour
 		}
 		else
 		{
-			buttons[spellIndex].cooldown.value = (nextSpellsUse[spellIndex] - Time.time) / SpellsData[spellIndex].cooldown;
+			buttons[spellIndex].cooldown.value = (nextSpellsUse[spellIndex] - Time.time) / SpellsData[spellIndex].cooldown.CalculatedValue;
 		}
 	}
 

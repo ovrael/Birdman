@@ -1,5 +1,5 @@
 ﻿public interface ITakeDamage
 {
-	float PercentageDamageReduction { get; set; }
+	Stat Armor { get; set; }
 	void TakeDamage(float damageTaken);
 }

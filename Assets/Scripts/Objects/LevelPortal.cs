@@ -9,6 +9,7 @@ using System;
 public class LevelPortal : MonoBehaviour
 {
 	[SerializeField] string nextSceneName;
+	[SerializeField] GameManagerSingleton gameManager;
 
 	Button enterButton;
 	GameObject warningText;
@@ -49,6 +50,7 @@ public class LevelPortal : MonoBehaviour
 			buttonListenerAssigned = true;
 			enterButton.onClick.RemoveAllListeners();
 			enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
+			enterButton.onClick.AddListener(() => { gameManager.Save(); });
 		}
 	}
 
@@ -58,7 +60,15 @@ public class LevelPortal : MonoBehaviour
 	{
 
 		if (sceneChanger == null)
-			FindSceneChanger();
+		{
+			sceneChanger = FindObjectOfType<SceneChanger>();
+			//FindSceneChanger();
+		}
+
+		if (gameManager == null)
+		{
+			gameManager = FindObjectOfType<GameManagerSingleton>();
+		}
 
 		if (enterButton == null)
 			FindEnterButton();

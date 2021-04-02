@@ -11,9 +11,7 @@ public class EnemyBehaviour : MonoBehaviour
 	public float attackDistance; //Minimum distance for attack
 	public float moveSpeed;
 	public float timer; //Timer for cooldown between attacks
-	Transform leftLimit;
 	[SerializeField] float leftLimitDistance = 10f;
-	Transform rightLimit;
 	[SerializeField] float rightLimitDistance = 10f;
 	[HideInInspector] public Transform target;
 	[HideInInspector] public bool inRange; //Check if  is in range
@@ -24,11 +22,14 @@ public class EnemyBehaviour : MonoBehaviour
 	#endregion
 
 	#region Private Variables
+	Transform leftLimit;
+	Transform rightLimit;
 	private Animator anim;
 	private float distance; //Store the distance b/w enemy and 
 	private bool attackMode;
 	private bool cooling; //Check if Enemy is cooling after attack
 	private float intTimer;
+	float damage;
 	#endregion
 
 	void Awake()
@@ -48,6 +49,8 @@ public class EnemyBehaviour : MonoBehaviour
 		SelectTarget();
 		intTimer = timer; //Store the inital value of timer
 		anim = GetComponent<Animator>();
+
+		damage = GetComponentInChildren<EnemyStats>().Damage;
 	}
 
 	void Update()
@@ -110,11 +113,9 @@ public class EnemyBehaviour : MonoBehaviour
 
 		if (hitBox.IsTouching(targetCollider))
 		{
-			//we have to get the damage stats from enemy but this line is not working
-			float damage = GetComponent<EnemyStats>().Damage;
 			target.GetComponentInChildren<PlayerStats>().TakeDamage(damage);
 			cooling = true;
-			Debug.LogWarning(damage);
+			Debug.LogWarning("Attack Player for: " + damage);
 		}
 	}
 

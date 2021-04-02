@@ -13,20 +13,41 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   name: Fireball
-  description: A ball of fire
+  description: A ball of fire...
   icon: {fileID: 21300000, guid: 97f86ccaafdc33a4098b9a9065d6ef74, type: 3}
   prefab: {fileID: 5553602586169215787, guid: 0e4481b42f8761945a846a0dd0ba22ce, type: 3}
-  level: 3
+  level: 2
   maxLevel: 20
-  manaCost: 20
-  cooldown: 1
+  manaCost:
+    calculatedValue: 45
+    baseValue: 45
+    flatIncome: 0
+    percentIncome: 0
+  cooldown:
+    calculatedValue: 2
+    baseValue: 2
+    flatIncome: 0
+    percentIncome: 0
   isOnCooldown: 0
-  duration: 4
+  duration:
+    calculatedValue: 3
+    baseValue: 3
+    flatIncome: 0
+    percentIncome: 0
   target: 1
   damageType: 1
-  minDamagePerInstance: 250
-  maxDamagePerInstance: 400
-  isDamageOverTime: 0
-  timeBetweenDamageInstances: 0
-  damageOverTimeDuration: 0
-  projectileSpeed: 16
+  minDamagePerInstance:
+    calculatedValue: 90
+    baseValue: 90
+    flatIncome: 0
+    percentIncome: 0
+  maxDamagePerInstance:
+    calculatedValue: 120
+    baseValue: 120
+    flatIncome: 0
+    percentIncome: 0
+  moreManaCost: 0
+  moreDuration: 0
+  moreMinDamage: 0
+  moreMaxDamage: 0
+  projectileSpeed: 12

@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2976544461225719132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6763468046406229821}
+  - component: {fileID: 214192892677294955}
+  m_Layer: 31
+  m_Name: stats
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6763468046406229821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976544461225719132}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6861005185341191160}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &214192892677294955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976544461225719132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7635e3765223a8048be9f86536fc7563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 500
+  currentHP: 500
+  damage: 100
+  experienceAfterDeath: 200
 --- !u!1 &6861005184301995478
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,7 +59,7 @@ GameObject:
   - component: {fileID: 6861005184301995476}
   m_Layer: 31
   m_Name: hitBox
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +76,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6861005185341191160}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6861005184301995476
 BoxCollider2D:
@@ -70,7 +117,7 @@ GameObject:
   - component: {fileID: 6861005184622353353}
   m_Layer: 31
   m_Name: triggerArea
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,7 +134,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6861005185341191160}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6861005184622353352
 BoxCollider2D:
@@ -139,10 +186,9 @@ GameObject:
   - component: {fileID: 6861005185341191161}
   - component: {fileID: 6861005185341191162}
   - component: {fileID: 6861005185341191163}
-  - component: {fileID: 6861005185341191159}
   m_Layer: 31
   m_Name: Skeleton
-  m_TagString: Enemy
+  m_TagString: EnemyObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -159,6 +205,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6861005185443785020}
+  - {fileID: 6763468046406229821}
   - {fileID: 6861005185533275169}
   - {fileID: 6861005184301995477}
   - {fileID: 6861005184622353351}
@@ -218,13 +265,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b43e09ddaae15d4e846f3847dca15fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawGizmos: 1
+  drawGizmos: 0
   attackDistance: 1.5
   moveSpeed: 2
   timer: 1
-  leftLimit: {fileID: 0}
   leftLimitDistance: 10
-  rightLimit: {fileID: 0}
   rightLimitDistance: 10
   target: {fileID: 0}
   inRange: 0
@@ -232,22 +277,6 @@ MonoBehaviour:
   hitBox: {fileID: 6861005184301995476}
   hotZone: {fileID: 6861005185473182405}
   triggerArea: {fileID: 6861005184622353354}
---- !u!114 &6861005185341191159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6861005185341191164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7635e3765223a8048be9f86536fc7563, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHP: 500
-  currentHP: 500
-  damage: 10
-  experienceAfterDeath: 200
 --- !u!1 &6861005185443785021
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,7 +289,7 @@ GameObject:
   - component: {fileID: 6861005185443785019}
   m_Layer: 31
   m_Name: enemy_colliider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -335,7 +364,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6861005185341191160}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6861005185473182403
 BoxCollider2D:
@@ -404,7 +433,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6861005185341191160}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6861005185533275168
 SpriteRenderer:
@@ -443,7 +472,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 569372929
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 7928858964255100155, guid: bc5e6220e5eb4494f831d5d5611a7e52,
     type: 3}

@@ -5,31 +5,30 @@ using UnityEngine;
 [System.Serializable]
 public class SavePlayerData
 {
-	public float maxHP;
-	public float regenHP;
-
-	public float maxMP;
-	public float regenMP;
+	public float baseHP;
+	public float baseRegenHP;
+	public float baseMP;
+	public float baseRegenMP;
+	public float baseArmor;
 
 	public int level;
 	public int spellPoints;
-
-	public float percentageDamageReduction;
+	public int passivePoints;
 
 	public string[] spellNames;
+	public int[] pickedNodesIds;
 
 	public SavePlayerData(PlayerStats playerStats, SpellSystem spellSystem)
 	{
-		maxHP = playerStats.MaxHP;
-		regenHP = playerStats.RegenHP;
-
-		maxMP = playerStats.MaxMP;
-		regenMP = playerStats.RegenMP;
+		baseHP = playerStats.Health.BaseValue;
+		baseRegenHP = playerStats.RegenHP.BaseValue;
+		baseMP = playerStats.Mana.BaseValue;
+		baseRegenMP = playerStats.RegenMP.BaseValue;
+		baseArmor = playerStats.Armor.BaseValue;
 
 		level = playerStats.Level;
 		spellPoints = playerStats.SpellPoints;
-
-		percentageDamageReduction = playerStats.PercentageDamageReduction;
+		passivePoints = playerStats.PassivePoints;
 
 		spellNames = new string[3];
 		for (int i = 0; i < spellSystem.SpellsData.Length; i++)
@@ -38,6 +37,12 @@ public class SavePlayerData
 			{
 				spellNames[i] = spellSystem.SpellsData[i].name;
 			}
+		}
+
+		pickedNodesIds = new int[playerStats.PassiveIds.Count];
+		for (int i = 0; i < pickedNodesIds.Length; i++)
+		{
+			pickedNodesIds[i] = playerStats.PassiveIds[i];
 		}
 	}
 }

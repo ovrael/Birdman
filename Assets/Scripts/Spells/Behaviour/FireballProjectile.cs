@@ -17,15 +17,15 @@ public class FireballProjectile : MonoBehaviour
 
 	private void Start()
 	{
-		Destroy(gameObject, spellStats.duration);
+		Destroy(gameObject, spellStats.duration.CalculatedValue);
 		rb.velocity = transform.up * spellStats.projectileSpeed;
 	}
 
 	void OnCollisionEnter2D(Collision2D collider)
 	{
-		if (collider.gameObject.CompareTag("Enemy"))
+		if (collider.gameObject.CompareTag("EnemyObject"))
 		{
-			collider.gameObject.GetComponent<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
+			collider.transform.GetComponentInChildren<EnemyStats>().TakeDamage(spellStats.CalculateDamagePerInstance());
 			Destroy(gameObject);
 		}
 

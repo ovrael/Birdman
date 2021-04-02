@@ -8,6 +8,12 @@ public class InteractableObject : MonoBehaviour
 {
 	[SerializeField] Button interactButton;
 
+	private void Awake()
+	{
+		if (GetComponent<Collider2D>() == null)
+			Debug.LogError("Interactable object: " + transform.name + " has no Collider2D component!");
+	}
+
 	void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.CompareTag("Player"))

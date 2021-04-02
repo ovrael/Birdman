@@ -30,7 +30,7 @@ public class ChainArcProjectile : MonoBehaviour
 	private void Start()
 	{
 		rb.velocity = transform.up * spellStats.projectileSpeed;
-		destroyTime = Time.time + spellStats.duration;
+		destroyTime = Time.time + spellStats.duration.CalculatedValue;
 	}
 
 
@@ -120,7 +120,7 @@ public class ChainArcProjectile : MonoBehaviour
 				nextTarget = enemies[enemiesIndexInRange[randomEnemyIndex]].transform;
 				currentTarget = nextTarget;
 
-				attackedEnemy = currentTarget.GetComponent<EnemyStats>();
+				attackedEnemy = currentTarget.parent.GetComponentInChildren<EnemyStats>();
 
 				rb.velocity = startVelocity;
 
@@ -142,7 +142,8 @@ public class ChainArcProjectile : MonoBehaviour
 					if (nextTarget != currentTarget)
 					{
 						currentTarget = nextTarget;
-						attackedEnemy = currentTarget.GetComponent<EnemyStats>();
+
+						attackedEnemy = currentTarget.parent.GetComponentInChildren<EnemyStats>();
 						break;
 					}
 

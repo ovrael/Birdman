@@ -19,7 +19,7 @@ public class StraightArcProjectile : MonoBehaviour
 
 	private void Start()
 	{
-		Destroy(gameObject, spellStats.duration);
+		Destroy(gameObject, spellStats.duration.CalculatedValue);
 		rb.velocity = transform.up * spellStats.projectileSpeed;
 	}
 
@@ -32,7 +32,7 @@ public class StraightArcProjectile : MonoBehaviour
 
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
-			EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
+			EnemyStats enemy = collision.transform.parent.GetComponentInChildren<EnemyStats>();
 			enemy.TakeDamage(spellStats.CalculateDamagePerInstance());
 		}
 	}

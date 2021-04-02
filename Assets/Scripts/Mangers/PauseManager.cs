@@ -39,12 +39,12 @@ public class PauseManager : MonoBehaviour
 	}
 
 
-	private void AssignPauseButton()
+	public void AssignPauseButton()
 	{
 		pauseButton.onClick.AddListener(() => { PauseGame(); });
 	}
 
-	private void AssignResumeButton()
+	public void AssignResumeButton()
 	{
 		resumeButton.onClick.AddListener(() => { ResumeGame(); });
 	}
@@ -64,7 +64,6 @@ public class PauseManager : MonoBehaviour
 	{
 		if (SceneManager.GetActiveScene().name != "GameOver")
 		{
-
 			if (pauseButton == null)
 			{
 				FindPauseButton();
@@ -77,6 +76,7 @@ public class PauseManager : MonoBehaviour
 				AssignResumeButton();
 			}
 		}
+
 
 		Time.timeScale = timeSpeed;
 	}

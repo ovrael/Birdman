@@ -13,12 +13,11 @@ public class FireBombExplosion : MonoBehaviour
 
 	void Start()
 	{
-		startRadius = spellStats.StartExplosionRadius;
-		endRadius = spellStats.EndExplosionRadius;
+		startRadius = spellStats.startExplosionRadius;
+		endRadius = spellStats.endExplosionRadius;
 
 		transform.localScale = new Vector3(startRadius, startRadius, 1);
 	}
-
 
 	void FixedUpdate()
 	{
@@ -39,7 +38,7 @@ public class FireBombExplosion : MonoBehaviour
 	{
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
-			EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
+			EnemyStats enemy = collision.transform.parent.GetComponentInChildren<EnemyStats>();
 			enemy.TakeDamage(spellStats.CalculateDamagePerInstance());
 		}
 	}

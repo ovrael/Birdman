@@ -1,46 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections.Generic;
 using TMPro;
 
 public class PlayerStats : MonoBehaviour, ITakeDamage
 {
-	private const int fixedUpdateRate = 50;
-
-	SceneChanger sceneChanger;
+	private const int fixedUpdateRate = 50;         // Value needed to correctly apply regeneration
+	[SerializeField] SceneChanger sceneChanger;                      // Calls "LoadGameOver" scene when player die
 
 	[Header("God mode")]
-	[SerializeField] bool unlimitedHP;
-	[SerializeField] bool unlimitedMP;
-	[SerializeField] bool noCooldowns;
+	[SerializeField] bool unlimitedHP;              // Give player max health every update
+	[SerializeField] bool unlimitedMP;              // Give player max mana every update
+	[SerializeField] bool noCooldowns;              // Removes cooldowns
 	[Tooltip("Player will stay alive at 1HP")]
-	[SerializeField] bool cantDie;
+	[SerializeField] bool cantDie;                  // Player never dies (stays at 1hp)
 
 	public bool NoCooldowns { get => noCooldowns; }
+
+	[Header("Bools")]
+	[SerializeField] bool resetStats = false;
+	[SerializeField] bool printPassvieNodesIds = false;
 
 	#region Health
 	[Header("Health")]
 
 	// Available in Unity
-	[SerializeField] float maxHP = 500;
+	[SerializeField] Stat health;
 	[SerializeField] float currentHP = 500;
-	[Tooltip("The regen is applied once per second")]
-	[SerializeField] float regenHP = 2.5f;
 	[Space]
-	[SerializeField] Slider hpSlider;
+	[Tooltip("Health regeneration per second (applied 1/50 value per fixedUpdate()")]
+	[SerializeField] Stat regenHP;
+	[Space]
+	[SerializeField] Slider hpSlider;               // UI Slider that shows current HP
 
 	// Properties
-	public float MaxHP
+	public Stat Health
 	{
-		get => maxHP;
+		get => health;
 		set
 		{
-			if (value > 0)
-			{
-				maxHP = value;
-			}
+			health = value;
+			hpSlider.maxValue = Health.CalculatedValue;
 		}
 	}
 
@@ -49,18 +50,18 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		get => currentHP;
 		set
 		{
-			if (value <= maxHP)
+			if (value < health.CalculatedValue)
 			{
 				currentHP = value;
 			}
 			else
 			{
-				currentHP = maxHP;
+				currentHP = health.CalculatedValue;
 			}
 		}
 	}
 
-	public float RegenHP
+	public Stat RegenHP
 	{
 		get => regenHP;
 		set => regenHP = value;
@@ -73,23 +74,21 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	[Header("Mana")]
 
 	// Available in Unity
-	[SerializeField] float maxMP = 200;
+	[SerializeField] Stat mana;
 	[SerializeField] float currentMP = 200;
-	[Tooltip("The regen is applied once per second")]
-	[SerializeField] float regenMP = 1.5f;
+	[Tooltip("Health regeneration per second (applied 1/50 value per fixedUpdate()")]
+	[SerializeField] Stat regenMP;
 	[Space]
-	[SerializeField] Slider mpSlider;
+	[SerializeField] Slider mpSlider;                // UI Slider that shows current MP
 
 	// Properties
-	public float MaxMP
+	public Stat Mana
 	{
-		get => maxMP;
+		get => mana;
 		set
 		{
-			if (value > 0)
-			{
-				maxMP = value;
-			}
+			mana = value;
+			mpSlider.maxValue = Mana.CalculatedValue;
 		}
 	}
 
@@ -98,17 +97,17 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		get => currentMP;
 		set
 		{
-			if (value >= 0 && value <= maxMP)
+			if (value >= 0 && value <= Mana.CalculatedValue)
 			{
 				currentMP = value;
 			}
-			if (value > maxMP)
+			if (value > Mana.CalculatedValue)
 			{
-				currentMP = maxMP;
+				currentMP = Mana.CalculatedValue;
 			}
 		}
 	}
-	public float RegenMP
+	public Stat RegenMP
 	{
 		get => regenMP;
 		set => regenMP = value;
@@ -129,6 +128,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	[SerializeField] int spellPoints = 1;
 	[SerializeField] TMP_Text spellPointsText;
 	[Space]
+	[SerializeField] int passivePoints = 1;
+	[SerializeField] TMP_Text passivePointsText;
+	[Space]
 	[SerializeField] Slider expSlider;
 
 	public int CurrentExp
@@ -142,7 +144,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 			}
 		}
 	}
-
 	public int ExpNeededToLevelUp
 	{
 		get => expNeededToLevelUp;
@@ -176,9 +177,22 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 			if (value >= 0)
 			{
 				spellPoints = value;
-				if (spellPointsText == null)
-					FindLeftPointsText();
-				spellPointsText.text = spellPoints.ToString();
+				if (spellPointsText != null)
+					spellPointsText.text = spellPoints.ToString();
+			}
+		}
+	}
+
+	public int PassivePoints
+	{
+		get => passivePoints;
+		set
+		{
+			if (value >= 0)
+			{
+				passivePoints = value;
+				if (passivePointsText != null)
+					passivePointsText.text = passivePoints.ToString();
 			}
 		}
 	}
@@ -188,18 +202,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		UpdateStats();
 		UpdateHUD();
 		// The rest - WIP
-	}
-
-	void UpdateHUD()
-	{
-		expSlider.maxValue = expNeededToLevelUp;
-		hpSlider.maxValue = MaxHP;
-		mpSlider.maxValue = MaxMP;
-		levelText.text = level.ToString();
-
-		if (spellPointsText == null)
-			FindLeftPointsText();
-		spellPointsText.text = spellPoints.ToString();
 	}
 
 	void CalcNeededExperienceToLevelUp()
@@ -215,20 +217,40 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	{
 		Level++;
 		SpellPoints++;
+		PassivePoints++;
 
 		currentExp -= expNeededToLevelUp;
 		CalcNeededExperienceToLevelUp();
 
-		bool isFullHP = (CurrentHP >= MaxHP) ? true : false;
-		bool isFullMP = (CurrentMP >= MaxMP) ? true : false;
+		bool isFullHP = (CurrentHP >= Health.CalculatedValue) ? true : false;
+		bool isFullMP = (CurrentMP >= Mana.CalculatedValue) ? true : false;
 
-		maxHP += 30;
+		health.BaseValue += 30;
 		if (isFullHP)
-			currentHP = maxHP;
+			currentHP = health.CalculatedValue;
 
-		maxMP += 10;
+		mana.BaseValue += 10;
 		if (isFullMP)
-			currentMP = maxMP;
+			currentMP = Mana.CalculatedValue;
+	}
+
+	#endregion
+
+	#region Taking Damage
+	[Header("Taking Damage")]
+
+	[Tooltip("If value is below zero, object takes increased damage")]
+	[SerializeField] Stat armor;
+	public Stat Armor
+	{
+		get => armor;
+		set => armor = value;
+	}
+
+	public void TakeDamage(float damageTaken)
+	{
+		float damageAfterReduction = ((100f - Armor.CalculatedValue) / 100) * damageTaken;
+		CurrentHP -= damageAfterReduction;
 	}
 
 	#endregion
@@ -237,8 +259,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	[Header("Movement")]
 
 	// Available in Unity
-	[SerializeField] float speed = 20;                               // Start at about 20
-	[SerializeField] float jumpPower = 250;                          // Start at about 250  
+	[SerializeField] float speed = 20;
+	[SerializeField] float jumpPower = 15;
 
 	// Properties
 	public float Speed { get => speed; }
@@ -246,42 +268,38 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
 	#endregion
 
-	#region Taking Damage
-	[Header("Taking Damage")]
-
-	[Tooltip("If value is below zero, object takes increased damage")]
-	[SerializeField] float percentageDamageReduction = 0;
-
-	public float PercentageDamageReduction
-	{
-		get => percentageDamageReduction;
-		set
-		{
-			if (value > 100)
-				percentageDamageReduction = 100;
-			else
-				percentageDamageReduction = value;
-		}
-
-	}
-
-	public void TakeDamage(float damageTaken)
-	{
-		float damageAfterReduction = ((100f - percentageDamageReduction) / 100) * damageTaken;
-		CurrentHP -= damageAfterReduction;
-	}
+	#region Passives
+	[Header("Passives")]
+	public List<int> PassiveIds;
 
 	#endregion
 
+	void UpdateHUD()
+	{
+		expSlider.maxValue = expNeededToLevelUp;
+		hpSlider.maxValue = Health.CalculatedValue;
+		mpSlider.maxValue = Mana.CalculatedValue;
+		levelText.text = level.ToString();
+
+		//if (spellPointsText == null)
+		//	spellPointsText = FindTextObjectByName("LeftSpellPointsText");
+		if (spellPointsText != null)
+			spellPointsText.text = spellPoints.ToString();
+
+		//if (passivePointsText == null)
+		//	passivePointsText = FindTextObjectByName("LeftPassivePointsText");
+		if (passivePointsText != null)
+			passivePointsText.text = passivePoints.ToString();
+	}
 
 	public void SetUp()
 	{
 		hpSlider.minValue = 0;
-		hpSlider.maxValue = maxHP;
+		hpSlider.maxValue = health.CalculatedValue;
 		hpSlider.value = currentHP;
 
 		mpSlider.minValue = 0;
-		mpSlider.maxValue = maxMP;
+		mpSlider.maxValue = Mana.CalculatedValue;
 		mpSlider.value = currentMP;
 
 		CalcNeededExperienceToLevelUp();
@@ -290,21 +308,55 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		expSlider.value = currentExp;
 
 		levelText.text = level.ToString();
-		spellPointsText.text = spellPoints.ToString();
+		if (spellPointsText != null)
+			spellPointsText.text = spellPoints.ToString();
+		if (passivePointsText != null)
+			passivePointsText.text = passivePoints.ToString();
 	}
 
-
-	private void Awake()
+	public void ResetStats()
 	{
+		Health = new Stat(Health.BaseValue);
+		Mana = new Stat(Mana.BaseValue);
+		RegenHP = new Stat(RegenHP.BaseValue);
+		RegenMP = new Stat(RegenMP.BaseValue);
+		Armor = new Stat(Armor.BaseValue);
+
+		PassiveIds = new List<int>();
+		PassivePoints = Level;
+	}
+
+	public void PrintPickedNodes()
+	{
+		string nodes = string.Empty;
+		foreach (var node in PassiveIds)
+		{
+			nodes += node + ", ";
+		}
+
+		Debug.Log("Picked nodes: " + nodes);
+	}
+
+	private TMP_Text FindTextObjectByName(string objectName)
+	{
+		var tmpTexts = Resources.FindObjectsOfTypeAll<TMP_Text>();
+		foreach (var text in tmpTexts)
+		{
+			if (text.name == objectName)
+			{
+				return text;
+			}
+		}
+		return null;
 	}
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "GameManager").FirstOrDefault();
-
-		if (sceneManager != null)
+		// Finds sceneChanger if loses reference
+		if (sceneChanger != null)
 		{
+			GameObject sceneManager = GameObject.FindGameObjectsWithTag("Manager").Where(g => g.name == "GameManager").FirstOrDefault();
 			sceneChanger = sceneManager.GetComponent<SceneChanger>();
 		}
 
@@ -319,12 +371,12 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
 		if (unlimitedHP)
 		{
-			currentHP = maxHP;
+			currentHP = health.CalculatedValue;
 		}
 
 		if (unlimitedMP)
 		{
-			currentMP = maxMP;
+			currentMP = Mana.CalculatedValue;
 		}
 
 		if (currentExp >= expNeededToLevelUp)
@@ -337,10 +389,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 			if (!cantDie)
 			{
 				SpellSystem spellSystem = transform.parent.GetComponentInChildren<SpellSystem>();
-
 				DataManager.GetPlayerData(this, spellSystem);
-
-
 
 				//Time.timeScale = 0f;
 				sceneChanger.LoadGameOver();
@@ -352,25 +401,28 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		}
 
 		if (spellPointsText == null)
-			FindLeftPointsText();
-	}
+			spellPointsText = FindTextObjectByName("LeftSpellPointsText");
 
-	private void FindLeftPointsText()
-	{
-		var tmpTexts = Resources.FindObjectsOfTypeAll<TMP_Text>();
-		foreach (var text in tmpTexts)
+		if (passivePointsText == null)
+			passivePointsText = FindTextObjectByName("LeftPassivePointsText");
+
+
+		if (resetStats)
 		{
-			if (text.name == "LeftPointsText")
-			{
-				spellPointsText = text;
-				break;
-			}
+			ResetStats();
+			resetStats = false;
+		}
+
+		if (printPassvieNodesIds)
+		{
+			PrintPickedNodes();
+			printPassvieNodesIds = false;
 		}
 	}
 
 	private void FixedUpdate()
 	{
-		CurrentHP += regenHP / fixedUpdateRate;
-		CurrentMP += regenMP / fixedUpdateRate;
+		CurrentHP += RegenHP.CalculatedValue / fixedUpdateRate;
+		CurrentMP += RegenMP.CalculatedValue / fixedUpdateRate;
 	}
 }

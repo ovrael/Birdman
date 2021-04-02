@@ -10,7 +10,10 @@ public class SpellTile : MonoBehaviour
 	PlayerStats player;
 	[SerializeField] SpellData spell;
 	[SerializeField] Button button;
+	[SerializeField] GameObject infoButton;
 	[SerializeField] bool resetLevel;
+
+	public SpellData GetSpell { get { return spell; } }
 
 	[Header("Background")]
 	[SerializeField] Image background;
@@ -30,12 +33,6 @@ public class SpellTile : MonoBehaviour
 	void Start()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
-
-		if (player.Level < requiedLevel)
-		{
-			spell.Level = 0;
-		}
-
 
 		spellLevelText.text = spell.Level.ToString();
 		button.image.sprite = spell.icon;
@@ -60,6 +57,11 @@ public class SpellTile : MonoBehaviour
 		}
 
 		spellLevelText.text = spell.Level.ToString();
+
+		if (spell.Level > 0)
+			infoButton.SetActive(true);
+		else
+			infoButton.SetActive(false);
 	}
 
 	public void LevelUpSpell()

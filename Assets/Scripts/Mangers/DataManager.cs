@@ -23,20 +23,21 @@ public class DataManager : MonoBehaviour
 	public static void AssignPlayerStats(GameObject player)
 	{
 		PlayerStats oldPlayerStats = player.GetComponentInChildren<PlayerStats>();
-		oldPlayerStats.MaxHP = playerStats.MaxHP;
-		oldPlayerStats.CurrentHP = oldPlayerStats.MaxHP;
+
+		oldPlayerStats.Health = playerStats.Health;
+		oldPlayerStats.CurrentHP = oldPlayerStats.Health.CalculatedValue;
 		oldPlayerStats.RegenHP = playerStats.RegenHP;
 
-		oldPlayerStats.MaxMP = playerStats.MaxMP;
-		oldPlayerStats.CurrentMP = oldPlayerStats.MaxMP;
+		oldPlayerStats.Mana = playerStats.Mana;
+		oldPlayerStats.CurrentMP = oldPlayerStats.Mana.CalculatedValue;
 		oldPlayerStats.RegenMP = playerStats.RegenMP;
 
-		oldPlayerStats.ExpNeededToLevelUp = playerStats.ExpNeededToLevelUp;
+		oldPlayerStats.Armor = playerStats.Armor;
+
 		oldPlayerStats.CurrentExp = 0;
 		oldPlayerStats.Level = playerStats.Level;
 		oldPlayerStats.SpellPoints = playerStats.SpellPoints;
-
-		oldPlayerStats.PercentageDamageReduction = playerStats.PercentageDamageReduction;
+		oldPlayerStats.PassivePoints = playerStats.PassivePoints;
 
 		oldPlayerStats.SetUp();
 	}

@@ -78,7 +78,7 @@ public class EnemyStats : MonoBehaviour
 	{
 		if (currentHP <= 0)
 		{
-			Destroy(gameObject);
+			Destroy(transform.parent.gameObject);
 			player.CurrentExp += experienceAfterDeath;
 		}
 	}

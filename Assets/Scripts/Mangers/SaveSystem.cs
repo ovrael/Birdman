@@ -35,4 +35,35 @@ public static class SaveSystem
 			return null;
 		}
 	}
+
+	public static void SaveSpells(SpellData[] spells)
+	{
+		BinaryFormatter formatter = new BinaryFormatter();
+		string path = Application.persistentDataPath + "/SpellsData.info";
+		FileStream fileStream = new FileStream(path, FileMode.Create);
+
+		SaveSpellsData spellsData = new SaveSpellsData(spells);
+
+		formatter.Serialize(fileStream, spellsData);
+		fileStream.Close();
+	}
+	public static SaveSpellsData LoadSpells()
+	{
+		string path = Application.persistentDataPath + "/SpellsData.info";
+		if (File.Exists(path))
+		{
+			BinaryFormatter formatter = new BinaryFormatter();
+			FileStream fileStream = new FileStream(path, FileMode.Open);
+
+			SaveSpellsData spellsData = (SaveSpellsData)formatter.Deserialize(fileStream);
+			fileStream.Close();
+
+			return spellsData;
+		}
+		else
+		{
+			Debug.LogError("File not found in " + path);
+			return null;
+		}
+	}
 }

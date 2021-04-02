@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
+	public static bool InMenu { get; private set; }
+
+	[SerializeField] PauseManager pauseManager;
+
 	[Header("Save objects")]
 	[SerializeField] GameObject player;
 	[SerializeField] GameObject[] savedObjects;
-	string[] savedNames;
+	[SerializeField] string[] savedNames;
 
 	[Header("Transition")]
 	[SerializeField] GameObject loadingCanvas;
@@ -17,6 +23,7 @@ public class SceneChanger : MonoBehaviour
 
 	private void Awake()
 	{
+		InMenu = true;
 		loadingCanvas.SetActive(true);
 		transition = loadingCanvas.GetComponentInChildren<Animator>();
 
@@ -37,6 +44,7 @@ public class SceneChanger : MonoBehaviour
 
 	public void LoadSceneByName(string sceneName)
 	{
+		InMenu = sceneName == "Menu" ? true : false;
 		StartCoroutine(LoadSceneByNameCoroutine(sceneName));
 	}
 
@@ -65,12 +73,16 @@ public class SceneChanger : MonoBehaviour
 		if (SceneManager.GetActiveScene().name != "GameOver")
 		{
 			Transform spawnPoint = GameObject.FindGameObjectWithTag("Spawn").transform;
+
+			if (player == null)
+				player = FindObjectOfType<PlayerStats>().transform.parent.gameObject;
 			player.transform.position = spawnPoint.position;
 		}
 	}
 
 	public void LoadMenu()
 	{
+		InMenu = true;
 		SceneManager.LoadScene("Menu");
 		SceneManager.sceneLoaded += OnMenuLoaded;
 	}
@@ -78,6 +90,9 @@ public class SceneChanger : MonoBehaviour
 	private void OnMenuLoaded(Scene arg0, LoadSceneMode arg1)
 	{
 		RestartGame();
+		pauseManager.AssignPauseButton();
+		pauseManager.AssignResumeButton();
+		Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(b => b.name == "QuitButton").onClick.AddListener(() => { QuitGame(); });
 	}
 	private void RestartGame()
 	{
@@ -106,8 +121,6 @@ public class SceneChanger : MonoBehaviour
 
 		DataManager.AssignPlayerStats(player);
 		DataManager.AssignPlayerSpellSystem(player);
-
-
 	}
 
 	public void LoadGameOver()
@@ -124,6 +137,7 @@ public class SceneChanger : MonoBehaviour
 	public void QuitGame()
 	{
 		Application.Quit();
+		Debug.Log("Quit game");
 	}
 
 	public static GameObject[] GetDontDestroyOnLoadObjects()

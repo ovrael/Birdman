@@ -12,7 +12,7 @@ public class WaterHealObject : MonoBehaviour
 			PlayerStats playerStats = player.GetComponentInChildren<PlayerStats>();
 
 			playerStats.CurrentHP += spellStats.CalculateDamagePerInstance();
-			Destroy(gameObject, spellStats.duration);
+			Destroy(gameObject, spellStats.duration.CalculatedValue);
 		}
 	}
 }

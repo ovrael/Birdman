@@ -6,14 +6,40 @@ using UnityEngine;
 public class GameManagerSingleton : MonoBehaviour
 {
 	public static GameManagerSingleton Instance { get; private set; }
+
+	[Header("Player Data")]
 	[SerializeField] PlayerStats playerStats;
 	[SerializeField] SpellSystem spellSystem;
+	[SerializeField] PassivesManager passiveManager;
+
+	[Header("Save system")]
+	[SerializeField] GameObject saveCanvas;
 	[SerializeField] float timeBetweenSaves = 30f;
+	[SerializeField] bool saveGameNow = false;
+
+
 	private float nextSaveTime;
 
-	private void Save()
+	public void Save()
 	{
 		SaveSystem.SavePlayer(playerStats, spellSystem);
+
+		if (passiveManager == null)
+		{
+			passiveManager = FindObjectOfType<PassivesManager>();
+		}
+
+		if (passiveManager != null)
+			SaveSystem.SaveSpells(passiveManager.allSpells);
+
+		StartCoroutine(ShowSaveText());
+	}
+
+	IEnumerator ShowSaveText()
+	{
+		saveCanvas.SetActive(true);
+		yield return new WaitForSeconds(1.5f);
+		saveCanvas.SetActive(false);
 	}
 
 	private void Load()
@@ -22,25 +48,44 @@ public class GameManagerSingleton : MonoBehaviour
 
 		if (playerData != null)
 		{
-			playerStats.MaxHP = playerData.maxHP;
-			playerStats.CurrentHP = playerStats.MaxHP;
-			playerStats.RegenHP = playerData.regenHP;
+			playerStats.Health = new Stat(playerData.baseHP);
+			playerStats.CurrentHP = playerStats.Health.CalculatedValue;
 
-			playerStats.MaxMP = playerData.maxMP;
-			playerStats.CurrentMP = playerStats.MaxMP;
-			playerStats.RegenMP = playerData.regenMP;
+			playerStats.RegenHP = new Stat(playerData.baseRegenHP);
+
+			if (playerData.baseMP == 0)
+				playerData.baseMP = 350;
+
+			playerStats.Mana = new Stat(playerData.baseMP);
+			playerStats.CurrentMP = playerStats.Mana.CalculatedValue;
+
+			playerStats.RegenMP = new Stat(playerData.baseRegenMP);
 
 			playerStats.Level = playerData.level;
 			playerStats.SpellPoints = playerData.spellPoints;
+			playerStats.PassivePoints = playerData.passivePoints;
 
-			playerStats.PercentageDamageReduction = playerData.percentageDamageReduction;
+			playerStats.Armor = new Stat(playerData.baseArmor);
 
 			spellSystem.SpellsData = LoadSpells(playerData.spellNames);
+
+			if (playerData.pickedNodesIds != null)
+			{
+				playerStats.PassiveIds = new List<int>();
+				for (int i = 0; i < playerData.pickedNodesIds.Length; i++)
+				{
+					playerStats.PassiveIds.Add(playerData.pickedNodesIds[i]);
+				}
+				LoadPassiveNodes(playerData.pickedNodesIds);
+			}
+			else
+				playerStats.PassiveIds = new List<int>();
 		}
 		else
 		{
 			Debug.LogError("Player data is null!");
 		}
+
 	}
 
 	private SpellData[] LoadSpells(string[] spellNames)
@@ -48,22 +93,97 @@ public class GameManagerSingleton : MonoBehaviour
 		SpellData[] returnSpells = new SpellData[3];
 		SpellData[] loadedSpells = Resources.LoadAll<SpellData>("");
 
-		int spellIndex = 0;
+		SaveSpellsData spellsData = SaveSystem.LoadSpells();
+
+		List<string> spellNamesList = new List<string>(spellsData.names);
+
+		if (spellsData == null)
+		{
+			spellsData = new SaveSpellsData(new SpellData[0]);
+			Debug.LogError("Spells data is null, created clear spells data object");
+		}
 
 		for (int i = 0; i < loadedSpells.Length; i++)
 		{
+			for (int j = 0; j < spellNamesList.Count; j++)
+			{
+				if (loadedSpells[i].name == spellNamesList[j])
+				{
+					SpellData loadedSpell = loadedSpells[i];
+					loadedSpell.manaCost = new Stat(spellsData.baseManaCosts[j]);
+					loadedSpell.cooldown = new Stat(spellsData.baseCooldowns[j]);
+					loadedSpell.duration = new Stat(spellsData.baseDurations[j]);
+					loadedSpell.minDamagePerInstance = new Stat(spellsData.baseMinDamagePerInstance[j]);
+					loadedSpell.maxDamagePerInstance = new Stat(spellsData.baseMaxDamagePerInstance[j]);
+					loadedSpell.description = spellsData.descriptions[j];
+					loadedSpell.createdDescription = spellsData.createdDescriptions[j];
+				}
+			}
+
 			for (int j = 0; j < spellNames.Length; j++)
 			{
 				if (loadedSpells[i].name == spellNames[j])
 				{
-					returnSpells[spellIndex] = loadedSpells[i];
-					spellIndex++;
+					returnSpells[j] = loadedSpells[i];
 					break;
 				}
 			}
 		}
 
+
+
 		return returnSpells;
+	}
+
+	private bool ContainsPickedPassive(int[] pickedPassives, int passiveID)
+	{
+		bool contains = false;
+
+		foreach (var picked in pickedPassives)
+		{
+			if (picked == passiveID)
+			{
+				contains = true;
+				break;
+			}
+		}
+
+		return contains;
+	}
+
+	private void LoadPassiveNodes(int[] pickedPassives)
+	{
+		PassiveNodeScript[] loadedPassives = Resources.LoadAll<PassiveNodeScript>("");
+
+		foreach (PassiveNodeScript passive in loadedPassives)
+		{
+			if (ContainsPickedPassive(pickedPassives, passive.id))
+			{
+				Debug.LogWarning("Applying: " + passive.nodeName);
+				passiveManager.ApplyPassiveNode(passive);
+			}
+		}
+	}
+
+	private void FindReferences()
+	{
+		if (playerStats == null)
+		{
+			playerStats = FindObjectOfType<PlayerStats>();
+		}
+
+		if (spellSystem == null)
+		{
+			spellSystem = FindObjectOfType<SpellSystem>();
+		}
+
+		if (passiveManager == null && SceneChanger.InMenu)
+		{
+			var objects = Resources.FindObjectsOfTypeAll<PassivesManager>();
+
+			if (objects.Length > 0)
+				passiveManager = objects[0];
+		}
 	}
 
 	private void Awake()
@@ -77,21 +197,35 @@ public class GameManagerSingleton : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+
+		saveCanvas.SetActive(false);
 	}
 
 	void Start()
 	{
 		Load();
-		nextSaveTime = Time.time;
+		nextSaveTime = Time.time + timeBetweenSaves;
 	}
 
 	private void Update()
 	{
-		if (Time.time > nextSaveTime)
+		FindReferences();
+
+		if (SceneChanger.InMenu)
+		{
+			if (Time.time > nextSaveTime)
+			{
+				Debug.Log("GAME SAVED");
+				Save();
+				nextSaveTime += timeBetweenSaves;
+			}
+		}
+
+		if (saveGameNow)
 		{
 			Debug.Log("GAME SAVED");
 			Save();
-			nextSaveTime += timeBetweenSaves;
+			saveGameNow = false;
 		}
 	}
 }

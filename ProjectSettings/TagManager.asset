@@ -10,6 +10,7 @@ TagManager:
   - Interactable
   - Manager
   - Spawn
+  - EnemyObject
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - CollideSpells
   - NoCollideSpells
   - Objects
-  - 
+  - Interactable
   - 
   - 
   - 
@@ -52,6 +53,9 @@ TagManager:
     locked: 0
   - name: Objects
     uniqueID: 3046194099
+    locked: 0
+  - name: Ground
+    uniqueID: 3061987697
     locked: 0
   - name: Enemies
     uniqueID: 569372929
