@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archer_IdleState : IdleState
+public class Archer_PlayerDetectedState : PlayerDetectedState
 {
     private Archer archer;
-    public Archer_IdleState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_IdleState stateData, Archer archer): base(entity, stateMachine, animBoolName, stateData)
+    public Archer_PlayerDetectedState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_PlayerDetected stateData, Archer archer):base(entity,stateMachine,animBoolName,stateData)
     {
         this.archer = archer;
     }
-
     public override void DoChecks()
     {
         base.DoChecks();
@@ -28,14 +27,10 @@ public class Archer_IdleState : IdleState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        if (isPlayerInMinAgroRange)
+        if (performCloseRangeAction)
         {
-            stateMachine.ChangeState(archer.playerDetectedState);
-        }
-        else if (isIdleTimeOver)
-        {
-            stateMachine.ChangeState(archer.moveState);
+            stateMachine.ChangeState(archer.meleeAttackState);
+            
         }
     }
 

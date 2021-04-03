@@ -29,6 +29,15 @@ public class Archer_MoveState : MoveState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        if (isPlayerInMinAgroRange)
+        {
+            stateMachine.ChangeState(archer.playerDetectedState);
+        }
+        else if(isDetectingWall || !isDetectingLedge)
+        {
+            archer.idleState.SetFlipAfterIdle(true);
+            stateMachine.ChangeState(archer.idleState);
+        }
     }
 
     public override void PhysicsUpdate()
