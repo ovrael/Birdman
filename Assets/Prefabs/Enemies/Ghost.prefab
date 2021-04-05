@@ -375,7 +375,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7635e3765223a8048be9f86536fc7563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 500
-  currentHP: 500
-  damage: 50
+  maxHP: 170
+  currentHP: 170
+  damage: 30
   experienceAfterDeath: 200
+  spriteRenderer: {fileID: 1292924248801756349}
+  spriteMaterial: {fileID: 2100000, guid: 1fe21a29c9afd114dba290b9b1ade818, type: 2}
+  takeDamageTint: {r: 1, g: 0, b: 0, a: 0.9019608}
+  tintFadeSpeed: 2

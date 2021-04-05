@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Firebomb
   description: Bomg that explodes after 2 seconds duration.
+  createdDescription: 'Deals 155,00 to 200,00 damage.Explosion radius:  4,50.'
   icon: {fileID: 21300000, guid: a5a5c8aaeec23544f8370bee36c0b68f, type: 3}
   prefab: {fileID: 6788851858732034970, guid: f57b7947e6925b74da38c6edca332132, type: 3}
-  level: 0
+  level: 6
   maxLevel: 20
   manaCost:
-    calculatedValue: 60
+    calculatedValue: 95
     baseValue: 60
-    flatIncome: 0
+    flatIncome: 35
     percentIncome: 0
   cooldown:
     calculatedValue: 5.5
@@ -37,20 +38,24 @@ MonoBehaviour:
   target: 1
   damageType: 1
   minDamagePerInstance:
-    calculatedValue: 180
-    baseValue: 180
-    flatIncome: 0
+    calculatedValue: 155
+    baseValue: 120
+    flatIncome: 35
     percentIncome: 0
   maxDamagePerInstance:
-    calculatedValue: 210
-    baseValue: 210
-    flatIncome: 0
+    calculatedValue: 200
+    baseValue: 140
+    flatIncome: 60
     percentIncome: 0
-  moreManaCost: 0
+  moreManaCost: 7
   moreDuration: 0
-  moreMinDamage: 0
-  moreMaxDamage: 0
+  moreMinDamage: 7
+  moreMaxDamage: 12
   startExplosionRadius: 0.01
-  endExplosionRadius: 5
-  explosionDuration: 4
-  moreEndExplosionRadius: 0
+  endExplosionRadius:
+    calculatedValue: 4.5
+    baseValue: 3.5
+    flatIncome: 1
+    percentIncome: 0
+  explosionDuration: 3
+  moreEndExplosionRadius: 0.2

@@ -50,7 +50,7 @@ public class IceCrystalSpawner : MonoBehaviour
 
 			Instantiate(iceProjectile, spawnPosition, projectileQuaternion);
 
-			nextProjectileSpawn = Time.time + spellStats.projectileSpawnTime;
+			nextProjectileSpawn = Time.time + spellStats.projectileSpawnTime.CalculatedValue;
 		}
 
 		if (Time.time > levitateDuration)

@@ -241,6 +241,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
 	[Tooltip("If value is below zero, object takes increased damage")]
 	[SerializeField] Stat armor;
+	bool tookDamage = false;
+
 	public Stat Armor
 	{
 		get => armor;
@@ -249,6 +251,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
 	public void TakeDamage(float damageTaken)
 	{
+		tookDamage = true;
 		float damageAfterReduction = ((100f - Armor.CalculatedValue) / 100) * damageTaken;
 		CurrentHP -= damageAfterReduction;
 	}
@@ -271,6 +274,16 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	#region Passives
 	[Header("Passives")]
 	public List<int> PassiveIds;
+
+	#endregion
+
+	#region Material and colors
+	[Header("Material and colors")]
+	[SerializeField] Material spriteMaterial;
+	//[SerializeField] Color takeDamageColor;
+	[SerializeField] Color takeDamageTint;
+	Color currentTint;
+	[SerializeField] float tintFadeSpeed;
 
 	#endregion
 
@@ -312,6 +325,8 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 			spellPointsText.text = spellPoints.ToString();
 		if (passivePointsText != null)
 			passivePointsText.text = passivePoints.ToString();
+
+		spriteMaterial.SetColor("_Tint", currentTint);
 	}
 
 	public void ResetStats()
@@ -368,6 +383,19 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		hpSlider.value = currentHP;
 		mpSlider.value = currentMP;
 		expSlider.value = currentExp;
+
+		if (tookDamage)
+		{
+			currentTint = takeDamageTint;
+			tookDamage = false;
+		}
+
+		if (currentTint.a > 0)
+		{
+
+			currentTint.a = Mathf.Clamp01(currentTint.a - tintFadeSpeed * Time.deltaTime);
+			spriteMaterial.SetColor("_Tint", currentTint);
+		}
 
 		if (unlimitedHP)
 		{

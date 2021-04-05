@@ -14,7 +14,7 @@ public class FireBombExplosion : MonoBehaviour
 	void Start()
 	{
 		startRadius = spellStats.startExplosionRadius;
-		endRadius = spellStats.endExplosionRadius;
+		endRadius = spellStats.endExplosionRadius.CalculatedValue;
 
 		transform.localScale = new Vector3(startRadius, startRadius, 1);
 	}

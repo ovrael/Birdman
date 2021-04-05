@@ -74,12 +74,25 @@ public class SpellData : ScriptableObject
 		return Random.Range(minDamagePerInstance.CalculatedValue, maxDamagePerInstance.CalculatedValue);
 	}
 
+	public virtual float[] GetCustomData()
+	{
+		return new float[0];
+	}
+
+	public virtual void SetCustomData(float[] customData)
+	{
+	}
+
 	public virtual void LevelUp()
 	{
-		manaCost += new Stat(moreManaCost);
-		duration += new Stat(moreDuration);
-		minDamagePerInstance += new Stat(moreMinDamage);
-		maxDamagePerInstance += new Stat(moreMaxDamage);
+		if (Level > 0)
+		{
+			manaCost += new Stat(0, moreManaCost, 0);
+			duration += new Stat(0, moreDuration, 0);
+			minDamagePerInstance += new Stat(0, moreMinDamage, 0);
+			maxDamagePerInstance += new Stat(0, moreMaxDamage, 0);
+		}
+
 		Level++;
 
 		CreateDescription();
@@ -92,7 +105,7 @@ public class SpellData : ScriptableObject
 		info.Append(minDamagePerInstance.CalculatedValue.ToString("0.00"));
 		info.Append(" to ");
 		info.Append(maxDamagePerInstance.CalculatedValue.ToString("0.00"));
-		info.Append(" damage. ");
+		info.Append(" damage.");
 
 		createdDescription = info.ToString();
 	}
