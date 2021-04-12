@@ -64,6 +64,7 @@ public class EnemyStats : MonoBehaviour
 	#endregion
 
 	#region Material and colors
+	[Header("Material and colors")]
 	[SerializeField] SpriteRenderer spriteRenderer;
 	[SerializeField] Material spriteMaterial;
 	[SerializeField] Color takeDamageTint;

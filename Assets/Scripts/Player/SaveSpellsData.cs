@@ -6,7 +6,7 @@ using UnityEngine;
 public class SaveSpellsData
 {
 	public string[] names;
-	public string[] descriptions;
+	public string[] descriptions; // DELETE TEST
 	public string[] createdDescriptions;
 
 	public int[] levels;

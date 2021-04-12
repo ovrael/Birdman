@@ -7,7 +7,7 @@ using TMPro;
 public class PlayerStats : MonoBehaviour, ITakeDamage
 {
 	private const int fixedUpdateRate = 50;         // Value needed to correctly apply regeneration
-	[SerializeField] SceneChanger sceneChanger;                      // Calls "LoadGameOver" scene when player die
+	[SerializeField] SceneChanger sceneChanger;     // Calls "LoadGameOver" scene when player die
 
 	[Header("God mode")]
 	[SerializeField] bool unlimitedHP;              // Give player max health every update
@@ -28,6 +28,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	// Available in Unity
 	[SerializeField] Stat health;
 	[SerializeField] float currentHP = 500;
+	[SerializeField] float hpBoostPerLevel = 30;
 	[Space]
 	[Tooltip("Health regeneration per second (applied 1/50 value per fixedUpdate()")]
 	[SerializeField] Stat regenHP;
@@ -76,6 +77,7 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	// Available in Unity
 	[SerializeField] Stat mana;
 	[SerializeField] float currentMP = 200;
+	[SerializeField] float mpBoostPerLevel = 20;
 	[Tooltip("Health regeneration per second (applied 1/50 value per fixedUpdate()")]
 	[SerializeField] Stat regenMP;
 	[Space]
@@ -201,37 +203,16 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	{
 		UpdateStats();
 		UpdateHUD();
-		// The rest - WIP
 	}
 
 	void CalcNeededExperienceToLevelUp()
 	{
-		int a = 5;
-		int b = 10;
-		int c = 485;
+		float a = 5;        // a > 0
+		float b = 10;
+		float c = 485;      // a+b+c = exp needed to level up at 1 level
 
-		expNeededToLevelUp = a * Level * Level + b * Level + c;
-	}
-
-	void UpdateStats()
-	{
-		Level++;
-		SpellPoints++;
-		PassivePoints++;
-
-		currentExp -= expNeededToLevelUp;
-		CalcNeededExperienceToLevelUp();
-
-		bool isFullHP = (CurrentHP >= Health.CalculatedValue) ? true : false;
-		bool isFullMP = (CurrentMP >= Mana.CalculatedValue) ? true : false;
-
-		health.BaseValue += 30;
-		if (isFullHP)
-			currentHP = health.CalculatedValue;
-
-		mana.BaseValue += 10;
-		if (isFullMP)
-			currentMP = Mana.CalculatedValue;
+		// The basic quadratic function to calc
+		expNeededToLevelUp = (int)Mathf.Floor(a * Level * Level + b * Level + c);
 	}
 
 	#endregion
@@ -280,12 +261,33 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 	#region Material and colors
 	[Header("Material and colors")]
 	[SerializeField] Material spriteMaterial;
-	//[SerializeField] Color takeDamageColor;
 	[SerializeField] Color takeDamageTint;
 	Color currentTint;
 	[SerializeField] float tintFadeSpeed;
 
 	#endregion
+
+	#region Methods
+	void UpdateStats()
+	{
+		Level++;
+		SpellPoints++;
+		PassivePoints++;
+
+		currentExp -= expNeededToLevelUp;
+		CalcNeededExperienceToLevelUp();
+
+		bool isFullHP = (CurrentHP >= Health.CalculatedValue) ? true : false;
+		bool isFullMP = (CurrentMP >= Mana.CalculatedValue) ? true : false;
+
+		health.BaseValue += hpBoostPerLevel;
+		if (isFullHP)
+			currentHP = health.CalculatedValue;
+
+		mana.BaseValue += mpBoostPerLevel;
+		if (isFullMP)
+			currentMP = Mana.CalculatedValue;
+	}
 
 	void UpdateHUD()
 	{
@@ -294,13 +296,9 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		mpSlider.maxValue = Mana.CalculatedValue;
 		levelText.text = level.ToString();
 
-		//if (spellPointsText == null)
-		//	spellPointsText = FindTextObjectByName("LeftSpellPointsText");
 		if (spellPointsText != null)
 			spellPointsText.text = spellPoints.ToString();
 
-		//if (passivePointsText == null)
-		//	passivePointsText = FindTextObjectByName("LeftPassivePointsText");
 		if (passivePointsText != null)
 			passivePointsText.text = passivePoints.ToString();
 	}
@@ -364,8 +362,10 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		}
 		return null;
 	}
+	#endregion
 
-	// Start is called before the first frame update
+	#region Unity Methods
+
 	void Start()
 	{
 		// Finds sceneChanger if loses reference
@@ -386,32 +386,24 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 
 		if (tookDamage)
 		{
-			currentTint = takeDamageTint;
+			currentTint = takeDamageTint; // Makes hero material red
 			tookDamage = false;
 		}
 
+		// Changes hero material back to normal color through time
 		if (currentTint.a > 0)
 		{
-
 			currentTint.a = Mathf.Clamp01(currentTint.a - tintFadeSpeed * Time.deltaTime);
 			spriteMaterial.SetColor("_Tint", currentTint);
 		}
 
-		if (unlimitedHP)
-		{
-			currentHP = health.CalculatedValue;
-		}
-
-		if (unlimitedMP)
-		{
-			currentMP = Mana.CalculatedValue;
-		}
-
+		// Check if can level up
 		if (currentExp >= expNeededToLevelUp)
 		{
 			LevelUpPlayer();
 		}
 
+		// Check if dying
 		if (currentHP <= 0)
 		{
 			if (!cantDie)
@@ -419,7 +411,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 				SpellSystem spellSystem = transform.parent.GetComponentInChildren<SpellSystem>();
 				DataManager.GetPlayerData(this, spellSystem);
 
-				//Time.timeScale = 0f;
 				sceneChanger.LoadGameOver();
 			}
 			else
@@ -446,6 +437,18 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 			PrintPickedNodes();
 			printPassvieNodesIds = false;
 		}
+
+
+		// Cheats
+		if (unlimitedHP)
+		{
+			currentHP = health.CalculatedValue;
+		}
+
+		if (unlimitedMP)
+		{
+			currentMP = Mana.CalculatedValue;
+		}
 	}
 
 	private void FixedUpdate()
@@ -453,4 +456,6 @@ public class PlayerStats : MonoBehaviour, ITakeDamage
 		CurrentHP += RegenHP.CalculatedValue / fixedUpdateRate;
 		CurrentMP += RegenMP.CalculatedValue / fixedUpdateRate;
 	}
+
+	#endregion
 }

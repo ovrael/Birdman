@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Straight Lightning
   description: Lightning that go through enemies
-  createdDescription: 'Deals 5,00 to 120,00 damage. '
+  createdDescription: Deals 5,00 to 120,00 damage.
   icon: {fileID: 21300000, guid: f72047325bb298c4aac2a77c00398a91, type: 3}
   prefab: {fileID: 6976103783975888986, guid: 95c676761a096044e9c2b182f24a8bd2, type: 3}
   level: 0

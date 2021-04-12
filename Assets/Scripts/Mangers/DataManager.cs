@@ -15,39 +15,39 @@ public class DataManager : MonoBehaviour
 
 	public static void AssignPlayerSpellSystem(GameObject player)
 	{
-		SpellSystem oldSpellSystem = player.GetComponentInChildren<SpellSystem>();
+		SpellSystem newSpellSystem = player.GetComponentInChildren<SpellSystem>();
 
-		oldSpellSystem.SpellsData = spellSystem.SpellsData;
+		newSpellSystem.SpellsData = spellSystem.SpellsData;
 	}
 
 	public static void AssignPlayerStats(GameObject player)
 	{
-		PlayerStats oldPlayerStats = player.GetComponentInChildren<PlayerStats>();
+		PlayerStats newPlayerStats = player.GetComponentInChildren<PlayerStats>();
 
-		oldPlayerStats.Health = playerStats.Health;
-		oldPlayerStats.CurrentHP = oldPlayerStats.Health.CalculatedValue;
-		oldPlayerStats.RegenHP = playerStats.RegenHP;
+		newPlayerStats.Health = playerStats.Health;
+		newPlayerStats.CurrentHP = newPlayerStats.Health.CalculatedValue;
+		newPlayerStats.RegenHP = playerStats.RegenHP;
 
-		oldPlayerStats.Mana = playerStats.Mana;
-		oldPlayerStats.CurrentMP = oldPlayerStats.Mana.CalculatedValue;
-		oldPlayerStats.RegenMP = playerStats.RegenMP;
+		newPlayerStats.Mana = playerStats.Mana;
+		newPlayerStats.CurrentMP = newPlayerStats.Mana.CalculatedValue;
+		newPlayerStats.RegenMP = playerStats.RegenMP;
 
-		oldPlayerStats.Armor = playerStats.Armor;
+		newPlayerStats.Armor = playerStats.Armor;
 
-		oldPlayerStats.CurrentExp = 0;
-		oldPlayerStats.Level = playerStats.Level;
-		oldPlayerStats.SpellPoints = playerStats.SpellPoints;
-		oldPlayerStats.PassivePoints = playerStats.PassivePoints;
-		oldPlayerStats.PassiveIds = new List<int>(playerStats.PassiveIds);
+		newPlayerStats.CurrentExp = 0;
+		newPlayerStats.Level = playerStats.Level;
+		newPlayerStats.SpellPoints = playerStats.SpellPoints;
+		newPlayerStats.PassivePoints = playerStats.PassivePoints;
+		newPlayerStats.PassiveIds = new List<int>(playerStats.PassiveIds);
 
 		PassiveNodeScript[] loadedPassives = Resources.LoadAll<PassiveNodeScript>("");
 
 		foreach (var passive in loadedPassives)
 		{
-			if (oldPlayerStats.PassiveIds.Contains(passive.id))
+			if (newPlayerStats.PassiveIds.Contains(passive.id))
 				passive.isPicked = true;
 		}
 
-		oldPlayerStats.SetUp();
+		// newPlayerStats.SetUp();
 	}
 }

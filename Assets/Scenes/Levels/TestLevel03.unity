@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 7422709956955429000, guid: a23cc6ce52102d94897c991798705469,
         type: 3}
       propertyPath: nextSceneName
-      value: TestLevel01
+      value: TestLevel04
       objectReference: {fileID: 0}
     - target: {fileID: 7422709956955429001, guid: a23cc6ce52102d94897c991798705469,
         type: 3}

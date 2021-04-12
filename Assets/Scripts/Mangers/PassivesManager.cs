@@ -13,6 +13,8 @@ public struct PassiveButton
 
 public class PassivesManager : MonoBehaviour
 {
+	[SerializeField] GameObject cantPickInfo;
+
 	[Header("Player Data")]
 	[SerializeField] PlayerStats playerStats;
 
@@ -45,7 +47,10 @@ public class PassivesManager : MonoBehaviour
 		PassiveButton passiveButton = passiveButtons[index];
 
 		if (playerStats.PassivePoints <= 0 || passiveButtons[index].node.isPicked)
+		{
+			StartCoroutine(ShowCantPickInfo());
 			return;
+		}
 
 		foreach (PassiveNodeScript node in passiveButton.requiredNodes)
 		{
@@ -66,8 +71,15 @@ public class PassivesManager : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("Cant pick new passive node!");
+			StartCoroutine(ShowCantPickInfo());
 		}
+
+	}
+	IEnumerator ShowCantPickInfo()
+	{
+		cantPickInfo.SetActive(true);
+		yield return new WaitForSeconds(1.5f);
+		cantPickInfo.SetActive(false);
 	}
 
 	public void ApplyPassiveNode(PassiveNodeScript passiveNode)
@@ -75,14 +87,11 @@ public class PassivesManager : MonoBehaviour
 		bool error = false;
 		foreach (Node node in passiveNode.nodes)
 		{
-			// Flat stat =  new Stat(0, node.value, 0);
-			// Percent stat =  new Stat(0, 0, node.value);
-
 			switch (node.type)
 			{
 				case NodeType.FlatIncrease:
 					{
-						switch (node.stat)
+						switch (node.targetStat)
 						{
 							case TargetStat.Health:
 								{
@@ -172,7 +181,7 @@ public class PassivesManager : MonoBehaviour
 					}
 				case NodeType.FlatDecrease:
 					{
-						switch (node.stat)
+						switch (node.targetStat)
 						{
 							case TargetStat.SpellManaCost:
 								{
@@ -192,7 +201,7 @@ public class PassivesManager : MonoBehaviour
 					}
 				case NodeType.PercentIncrease:
 					{
-						switch (node.stat)
+						switch (node.targetStat)
 						{
 							case TargetStat.Health:
 								{
@@ -290,7 +299,7 @@ public class PassivesManager : MonoBehaviour
 					}
 				case NodeType.PercentDecrease:
 					{
-						switch (node.stat)
+						switch (node.targetStat)
 						{
 							case TargetStat.Health:
 								{
@@ -396,6 +405,7 @@ public class PassivesManager : MonoBehaviour
 
 		if (error)
 		{
+			StartCoroutine(ShowCantPickInfo());
 			Debug.LogError("Error node in: " + passiveNode.nodeName);
 		}
 		else
