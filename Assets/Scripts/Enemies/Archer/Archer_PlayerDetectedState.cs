@@ -30,7 +30,14 @@ public class Archer_PlayerDetectedState : PlayerDetectedState
         if (performCloseRangeAction)
         {
             stateMachine.ChangeState(archer.meleeAttackState);
-            
+        }
+        else if (performLongRangeAction)
+        {
+            stateMachine.ChangeState(archer.rangedAttackState);
+        }
+        else if (!isPlayerInMaxAgroRange)
+        {
+            stateMachine.ChangeState(archer.lookForPlayerState);
         }
     }
 

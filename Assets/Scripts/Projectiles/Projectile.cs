@@ -62,7 +62,7 @@ public class Projectile : MonoBehaviour
 
             if (damageHit)
             {
-                damageHit.transform.SendMessage("Damage", attackDetails);
+                damageHit.GetComponentInChildren<PlayerStats>().TakeDamage(10);
                 Destroy(gameObject);
             }
 

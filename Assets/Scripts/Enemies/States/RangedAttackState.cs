@@ -46,6 +46,7 @@ public class RangedAttackState : AttackState
 
     public override void TriggerAttack()
     {
+        Debug.LogWarning("damage jebany furrasie");
         base.TriggerAttack();
 
         projectile = GameObject.Instantiate(stateData.projectile, attackPosition.position, attackPosition.rotation);

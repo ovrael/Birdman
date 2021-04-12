@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archer_MeleeAttackState : MeleeAttackState
+public class Archer_RangedAttackState : RangedAttackState
 {
-    private Archer archer;
 
-    public Archer_MeleeAttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, Transform attackPosition, D_MeleeAttack stateData, Archer archer) : base(entity, stateMachine, animBoolName, attackPosition, stateData)
+    private Archer archer;
+    public Archer_RangedAttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, Transform attackPosition, D_RangedAttackState stateData, Archer archer) : base(entity, stateMachine, animBoolName, attackPosition, stateData)
     {
         this.archer = archer;
     }
+
     public override void DoChecks()
     {
         base.DoChecks();
@@ -33,13 +34,13 @@ public class Archer_MeleeAttackState : MeleeAttackState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
         if (isAnimationFinished)
         {
             if (isPlayerInMinAgroRange)
             {
                 stateMachine.ChangeState(archer.playerDetectedState);
-            }else if (!isPlayerInMinAgroRange)
+            }
+            else
             {
                 stateMachine.ChangeState(archer.lookForPlayerState);
             }
