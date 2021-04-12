@@ -121,4 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b4d117df8520cb469a4733725d62870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Level01
+  nextSceneName: TestLevel01
+  gameManager: {fileID: 0}

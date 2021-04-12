@@ -7,7 +7,7 @@ using UnityEngine;
 public class IceCrystal : SpellData
 {
 	[Header("Own stats")]
-	public float projectileSpawnTime;
+	public Stat projectileSpawnTime;
 	public float projectileSpeed;
 
 	public float setUpFlySpeed;
@@ -16,10 +16,28 @@ public class IceCrystal : SpellData
 	[Header("Own level up income")]
 	public float lessProjectileSpawnTime;
 
+	private readonly int customDataCount = 1;
+	public override float[] GetCustomData()
+	{
+		float[] customData = new float[customDataCount];
+		customData[0] = projectileSpawnTime.BaseValue;
+
+		return customData;
+	}
+
+	public override void SetCustomData(float[] customData)
+	{
+		if (customData.Length == customDataCount)
+		{
+			projectileSpawnTime = new Stat(customData[0], 0, 0);
+		}
+	}
+
 	public override void LevelUp()
 	{
-		if (projectileSpawnTime - lessProjectileSpawnTime > 0.1f)
-			projectileSpawnTime -= lessProjectileSpawnTime;
+		if (Level > 0)
+			if (projectileSpawnTime.CalculatedValue - lessProjectileSpawnTime > 0.2f)
+				projectileSpawnTime -= new Stat(0, lessProjectileSpawnTime, 0);
 
 		base.LevelUp();
 	}
@@ -30,9 +48,9 @@ public class IceCrystal : SpellData
 		info.Append(minDamagePerInstance.CalculatedValue.ToString("0.00"));
 		info.Append(" to ");
 		info.Append(maxDamagePerInstance.CalculatedValue.ToString("0.00"));
-		info.Append(" damage. ");
+		info.AppendLine(" damage.");
 		info.Append("Ice Crystal creates one projectile per ");
-		info.Append(projectileSpawnTime.ToString("0.00"));
+		info.Append(projectileSpawnTime.CalculatedValue.ToString("0.00"));
 		info.Append(" seconds. ");
 
 		createdDescription = info.ToString();

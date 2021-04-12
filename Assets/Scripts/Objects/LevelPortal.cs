@@ -49,8 +49,8 @@ public class LevelPortal : MonoBehaviour
 		{
 			buttonListenerAssigned = true;
 			enterButton.onClick.RemoveAllListeners();
-			enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
 			enterButton.onClick.AddListener(() => { gameManager.Save(); });
+			enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
 		}
 	}
 
@@ -62,7 +62,6 @@ public class LevelPortal : MonoBehaviour
 		if (sceneChanger == null)
 		{
 			sceneChanger = FindObjectOfType<SceneChanger>();
-			//FindSceneChanger();
 		}
 
 		if (gameManager == null)
@@ -79,8 +78,8 @@ public class LevelPortal : MonoBehaviour
 			{
 				buttonListenerAssigned = true;
 				enterButton.onClick.RemoveAllListeners();
+				enterButton.onClick.AddListener(() => { gameManager.Save(); });
 				enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
-
 			}
 		}
 	}
@@ -92,6 +91,14 @@ public class LevelPortal : MonoBehaviour
 		{
 			if (collision.gameObject.GetComponentInChildren<SpellSystem>().AssignedSpellsCount() > 0)
 			{
+				if (sceneChanger != null && enterButton != null)
+				{
+					buttonListenerAssigned = true;
+					enterButton.onClick.RemoveAllListeners();
+					enterButton.onClick.AddListener(() => { gameManager.Save(); });
+					enterButton.onClick.AddListener(() => { sceneChanger.LoadSceneByName(nextSceneName); });
+				}
+
 				enterButton.gameObject.SetActive(true);
 			}
 			else

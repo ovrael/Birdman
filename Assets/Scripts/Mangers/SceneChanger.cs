@@ -9,6 +9,7 @@ public class SceneChanger : MonoBehaviour
 	public static bool InMenu { get; private set; }
 
 	[SerializeField] PauseManager pauseManager;
+	[SerializeField] GameManagerSingleton gameManager;
 
 	[Header("Save objects")]
 	[SerializeField] GameObject player;
@@ -20,6 +21,8 @@ public class SceneChanger : MonoBehaviour
 	[SerializeField] float transitionTime = 1f;
 	Animator transition;
 
+	[Header("Button names")]
+	[SerializeField] string[] buttonNames;
 
 	private void Awake()
 	{

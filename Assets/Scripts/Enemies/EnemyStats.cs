@@ -44,6 +44,7 @@ public class EnemyStats : MonoBehaviour
 	#region Damage
 	[Header("Damage")]
 	[SerializeField] float damage = 100;
+	bool tookDamage = false;
 
 	public float Damage
 	{
@@ -62,16 +63,29 @@ public class EnemyStats : MonoBehaviour
 
 	#endregion
 
+	#region Material and colors
+	[SerializeField] SpriteRenderer spriteRenderer;
+	[SerializeField] Material spriteMaterial;
+	[SerializeField] Color takeDamageTint;
+	Color currentTint;
+	[SerializeField] float tintFadeSpeed;
+	#endregion
+
 	#region Methods
 	public void TakeDamage(float damage)
 	{
 		currentHP -= damage;
+		tookDamage = true;
 	}
+
 	#endregion
 
 	private void Start()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerStats>();
+		spriteRenderer.material = new Material(spriteMaterial);
+		currentTint.a = 0;
+		spriteMaterial.SetColor("_Tint", currentTint);
 	}
 
 	private void Update()
@@ -80,6 +94,18 @@ public class EnemyStats : MonoBehaviour
 		{
 			Destroy(transform.parent.gameObject);
 			player.CurrentExp += experienceAfterDeath;
+		}
+
+		if (tookDamage)
+		{
+			currentTint = takeDamageTint;
+			tookDamage = false;
+		}
+
+		if (currentTint.a > 0)
+		{
+			currentTint.a = Mathf.Clamp01(currentTint.a - tintFadeSpeed * Time.deltaTime);
+			spriteRenderer.material.SetColor("_Tint", currentTint);
 		}
 	}
 }

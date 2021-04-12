@@ -30,15 +30,24 @@ public class PassivesManager : MonoBehaviour
 	[SerializeField] PassiveButton[] passiveButtons;
 
 	[Header("Node Look")]
-	[SerializeField] Shader activeShader;
-	[SerializeField] Shader inactiveShader;
-	[SerializeField] Material defaultMaterial;
+	[SerializeField] Material materialWithBetterShader;
+	[Space]
+	[SerializeField] Color activeColor;
+	[SerializeField] Color activeTint;
+	[Space]
+	[SerializeField] Color inactiveColor;
+	[SerializeField] Color inactiveTint;
+
 
 	public void CheckIfCanPickPassive(int index)
 	{
 		bool hasRequiredNode = false;
+		PassiveButton passiveButton = passiveButtons[index];
 
-		foreach (PassiveNodeScript node in passiveButtons[index].requiredNodes)
+		if (playerStats.PassivePoints <= 0 || passiveButtons[index].node.isPicked)
+			return;
+
+		foreach (PassiveNodeScript node in passiveButton.requiredNodes)
 		{
 			if (node.isPicked)
 			{
@@ -47,13 +56,13 @@ public class PassivesManager : MonoBehaviour
 			}
 		}
 
-		if (passiveButtons[index].requiredNodes.Length == 0)
+		if (passiveButton.requiredNodes.Length == 0)
 			hasRequiredNode = true;
 
-		if (playerStats.PassivePoints > 0 && hasRequiredNode)
+		if (hasRequiredNode)
 		{
-			ApplyPassiveNode(passiveButtons[index].node);
-			ActivateNode(passiveButtons[index].button.image);
+			ApplyPassiveNode(passiveButton.node);
+			ActivateNode(passiveButton.button.image.material);
 		}
 		else
 		{
@@ -398,15 +407,15 @@ public class PassivesManager : MonoBehaviour
 		}
 	}
 
-	public void ActivateNode(Image image)
+	public void ActivateNode(Material material)
 	{
-		Material material = image.material;
-		material.shader = activeShader;
+		material.SetColor("_Color", activeColor);
+		material.SetColor("_Tint", activeTint);
 	}
-	public void DeactivateNode(Image image)
+	public void DeactivateNode(Material material)
 	{
-		Material material = image.material;
-		material.shader = inactiveShader;
+		material.SetColor("_Color", inactiveColor);
+		material.SetColor("_Tint", inactiveTint);
 	}
 
 	private void ResetPassives()
@@ -414,7 +423,7 @@ public class PassivesManager : MonoBehaviour
 		foreach (PassiveButton passiveButton in passiveButtons)
 		{
 			passiveButton.node.isPicked = false;
-			DeactivateNode(passiveButton.button.image);
+			DeactivateNode(passiveButton.button.image.material);
 		}
 
 		playerStats.ResetStats();
@@ -445,13 +454,13 @@ public class PassivesManager : MonoBehaviour
 			Image image = passiveButtons[x].button.GetComponent<Image>();
 			image.sprite = passiveButtons[x].node.icon;
 
-			Material newMaterial = new Material(defaultMaterial);
+			Material newMaterial = new Material(materialWithBetterShader);
 			newMaterial.SetTexture("_MainTex", image.mainTexture);
 
 			image.material = newMaterial;
 
 			if (!passiveButtons[x].node.isPicked)
-				DeactivateNode(image);
+				DeactivateNode(image.material);
 
 			passiveButtons[x].button.onClick.AddListener(() => { CheckIfCanPickPassive(x); });
 		}

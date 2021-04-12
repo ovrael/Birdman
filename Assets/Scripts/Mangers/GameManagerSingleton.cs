@@ -17,7 +17,6 @@ public class GameManagerSingleton : MonoBehaviour
 	[SerializeField] float timeBetweenSaves = 30f;
 	[SerializeField] bool saveGameNow = false;
 
-
 	private float nextSaveTime;
 
 	public void Save()
@@ -71,11 +70,6 @@ public class GameManagerSingleton : MonoBehaviour
 
 			if (playerData.pickedNodesIds != null)
 			{
-				playerStats.PassiveIds = new List<int>();
-				for (int i = 0; i < playerData.pickedNodesIds.Length; i++)
-				{
-					playerStats.PassiveIds.Add(playerData.pickedNodesIds[i]);
-				}
 				LoadPassiveNodes(playerData.pickedNodesIds);
 			}
 			else
@@ -110,13 +104,24 @@ public class GameManagerSingleton : MonoBehaviour
 				if (loadedSpells[i].name == spellNamesList[j])
 				{
 					SpellData loadedSpell = loadedSpells[i];
+
+					loadedSpell.Level = 0;
+					loadedSpell.description = spellsData.descriptions[j];
+					loadedSpell.createdDescription = spellsData.createdDescriptions[j];
+
 					loadedSpell.manaCost = new Stat(spellsData.baseManaCosts[j]);
 					loadedSpell.cooldown = new Stat(spellsData.baseCooldowns[j]);
 					loadedSpell.duration = new Stat(spellsData.baseDurations[j]);
+
 					loadedSpell.minDamagePerInstance = new Stat(spellsData.baseMinDamagePerInstance[j]);
 					loadedSpell.maxDamagePerInstance = new Stat(spellsData.baseMaxDamagePerInstance[j]);
-					loadedSpell.description = spellsData.descriptions[j];
-					loadedSpell.createdDescription = spellsData.createdDescriptions[j];
+
+					loadedSpell.SetCustomData(spellsData.customData[j]);
+
+					for (int k = 0; k < spellsData.levels[j]; k++)
+					{
+						loadedSpell.LevelUp();
+					}
 				}
 			}
 
@@ -124,7 +129,9 @@ public class GameManagerSingleton : MonoBehaviour
 			{
 				if (loadedSpells[i].name == spellNames[j])
 				{
-					returnSpells[j] = loadedSpells[i];
+					if (loadedSpells[i].Level > 0)
+						returnSpells[j] = loadedSpells[i];
+
 					break;
 				}
 			}
@@ -159,7 +166,6 @@ public class GameManagerSingleton : MonoBehaviour
 		{
 			if (ContainsPickedPassive(pickedPassives, passive.id))
 			{
-				Debug.LogWarning("Applying: " + passive.nodeName);
 				passiveManager.ApplyPassiveNode(passive);
 			}
 		}

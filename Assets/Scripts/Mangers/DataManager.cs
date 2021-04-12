@@ -38,6 +38,15 @@ public class DataManager : MonoBehaviour
 		oldPlayerStats.Level = playerStats.Level;
 		oldPlayerStats.SpellPoints = playerStats.SpellPoints;
 		oldPlayerStats.PassivePoints = playerStats.PassivePoints;
+		oldPlayerStats.PassiveIds = new List<int>(playerStats.PassiveIds);
+
+		PassiveNodeScript[] loadedPassives = Resources.LoadAll<PassiveNodeScript>("");
+
+		foreach (var passive in loadedPassives)
+		{
+			if (oldPlayerStats.PassiveIds.Contains(passive.id))
+				passive.isPicked = true;
+		}
 
 		oldPlayerStats.SetUp();
 	}

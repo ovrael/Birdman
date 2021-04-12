@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StraightArcProjectile : MonoBehaviour
+public class StraightLightningProjectile : MonoBehaviour
 {
-	[SerializeField] StraightArc spellStats;
+	[SerializeField] StraightLightning spellStats;
 
 	private Rigidbody2D rb;
 

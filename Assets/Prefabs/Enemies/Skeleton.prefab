@@ -43,10 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7635e3765223a8048be9f86536fc7563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 500
-  currentHP: 500
-  damage: 100
+  maxHP: 250
+  currentHP: 250
+  damage: 40
   experienceAfterDeath: 200
+  spriteRenderer: {fileID: 6861005185533275168}
+  spriteMaterial: {fileID: 2100000, guid: 1fe21a29c9afd114dba290b9b1ade818, type: 2}
+  takeDamageTint: {r: 1, g: 0, b: 0, a: 0.9019608}
+  tintFadeSpeed: 2
 --- !u!1 &6861005184301995478
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +457,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1fe21a29c9afd114dba290b9b1ade818, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
