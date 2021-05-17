@@ -89,7 +89,7 @@ public class LevelPortal : MonoBehaviour
 	{
 		if (collision.CompareTag("Player"))
 		{
-			if (collision.gameObject.GetComponentInChildren<SpellSystem>().AssignedSpellsCount() > 0)
+			if (collision.gameObject.GetComponentInChildren<SpellSystem>().AssignedSpellsCount() >= 0)
 			{
 				if (sceneChanger != null && enterButton != null)
 				{
