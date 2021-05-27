@@ -16,6 +16,8 @@ public struct SpellButton
 
 public class SpellSystem : MonoBehaviour
 {
+	[SerializeField] Animator animator;
+
 	[Tooltip("Use it to reassign spells or after changes in script")]
 	[SerializeField] bool restart;
 
@@ -69,6 +71,7 @@ public class SpellSystem : MonoBehaviour
 
 	public void UseSpell(int spellNumber)
 	{
+		animator.Play("SpellCast");
 		if (player.CurrentMP >= SpellsData[spellNumber].manaCost.CalculatedValue && !SpellsData[spellNumber].isOnCooldown)
 		{
 			float sideRotation = (Math.Sign(player.transform.parent.transform.localScale.x) == 1) ? 180 : 0;
