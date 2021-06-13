@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-	[Header("Enemies array")]
-	[SerializeField] GameObject[] enemies;
+	EnemySpawnerData spawnerData;
 
 	[Header("Spawn position")]
 	[SerializeField] Transform leftLimitPosition;
 	[SerializeField] Transform rightLimitPosition;
 
-	[Header("Options")]
-	[Tooltip("Time between spawning next enemy [IN SECONDS]")]
-	[SerializeField] float spawnRate = 2f;
-	[SerializeField] int enemiesLimit = 10;
+
 
 	Vector2 whereToSpawn;
 	float leftLimitSpawn;
@@ -33,17 +29,17 @@ public class EnemySpawner : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Time.time > nextSpawn && enemiesSpawned < enemiesLimit)
+		if (Time.time > nextSpawn && enemiesSpawned < spawnerData.enemiesLimit)
 		{
-			nextSpawn = Time.time + spawnRate;
+			nextSpawn = Time.time + spawnerData.spawnRate;
 			randXPosition = Random.Range(leftLimitSpawn, rightLimitSpawn);
 			whereToSpawn = new Vector2(randXPosition, transform.position.y);
 
 
-			Instantiate(enemies[Random.Range(0, enemies.Length)], whereToSpawn, Quaternion.identity);
+			Instantiate(spawnerData.enemies[Random.Range(0, spawnerData.enemies.Length)], whereToSpawn, Quaternion.identity);
 			enemiesSpawned++;
 		}
-		else if (enemiesSpawned >= enemiesLimit)
+		else if (enemiesSpawned >= spawnerData.enemiesLimit)
 		{
 			Destroy(gameObject);
 		}

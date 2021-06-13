@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies:
   - {fileID: 6861005185341191164, guid: 82b763df332d10541bdad893133d1967, type: 3}
-  - {fileID: 1292924248801756343, guid: 522d6aad254cf904b90142bea4e2f48d, type: 3}
+  - {fileID: 64294843031205098, guid: 989d0178e5beb634e8ef046a67a6f766, type: 3}
   leftLimitPosition: {fileID: 628826637103015598}
   rightLimitPosition: {fileID: 628826636762827388}
   spawnRate: 2
