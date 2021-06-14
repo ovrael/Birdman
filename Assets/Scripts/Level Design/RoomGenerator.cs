@@ -9,40 +9,36 @@ public class RoomGenerator : MonoBehaviour
 {
 	[Header("Tilemap")]
 	[Tooltip("The Tilemap to draw onto")]
-	public Tilemap tilemap;
+	[SerializeField] private Tilemap tilemap;
 	[Tooltip("The Tile to draw (use a RuleTile for best results)")]
-	public TileBase tile;
+	[SerializeField] private TileBase tile;
 
-	[Header("Custom elements")]
-	[Tooltip("Game object under whom will Instantiate objects")]
-	public Transform objectsParent;
-	[Tooltip("Spawn prefab")]
-	public GameObject spawn;
-	[Tooltip("Teleport prefab")]
-	public GameObject teleport;
-
+	[Header("Objects in map")]
+	[SerializeField] private RoomPolishing roomPolishing;
 
 	[Tooltip("Width of our map")]
 	[Range(7, 40)]
-	public int roomWidth = 14;
+	[SerializeField] private int roomWidth = 14;
 	[Tooltip("Height of our map")]
 	[Range(7, 30)]
-	public int roomHeight = 8;
+	[SerializeField] private int roomHeight = 8;
 
 	[Tooltip("Width of our map")]
-	public int horizontalRooms = 6;
+	[SerializeField] private int horizontalRooms = 6;
 	[Tooltip("Height of our map")]
-	public int verticalRooms = 3;
+	[SerializeField] private int verticalRooms = 3;
 
 	[Tooltip("Height of our map")]
-	public int maxPathLength = 15;
+	[SerializeField] private int maxPathLength = 15;
 
 	[Tooltip("The settings of our map")]
+	[SerializeField] private bool deleteDefaultRooms;
+
 	[Range(0f, 100f)]
-	public float fillAmount;
+	[SerializeField] private float fillAmount;
 
 	[Range(0, 10)]
-	public int smoothAmount;
+	[SerializeField] private int smoothAmount;
 
 	[ExecuteInEditMode]
 	public void GenerateMap()
@@ -61,26 +57,25 @@ public class RoomGenerator : MonoBehaviour
 		}
 
 		RoomFunctions.CreatePathInRooms(rooms, maxPathLength);
+
+		if (deleteDefaultRooms)
+			RoomFunctions.DeleteRoomsIsntOnPath(rooms);
+
 		RoomFunctions.RenderRooms(rooms, tilemap, tile);
+		roomPolishing.SetRoomsAndAddObjects(rooms);
 	}
 
 	public void ClearMap()
 	{
 		tilemap.ClearAllTiles();
-		foreach (Transform child in objectsParent)
-		{
-			Destroy(child.gameObject);
-		}
+		roomPolishing.ClearObjects();
 	}
 
 	private void Awake()
 	{
-		RoomFunctions.objectsParent = objectsParent;
-		RoomFunctions.teleport = teleport;
-		RoomFunctions.spawn = spawn;
-
 		ClearMap();
 		GenerateMap();
+		// roomPolishing = null;
 	}
 
 	private void Update()

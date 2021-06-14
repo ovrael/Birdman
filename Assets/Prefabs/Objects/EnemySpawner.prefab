@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628826636762827391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.93, y: 0, z: 0}
+  m_LocalPosition: {x: 15, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 628826638215609020}
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628826637103015593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -36.95, y: 0, z: 0}
+  m_LocalPosition: {x: -15, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 628826638215609020}
@@ -85,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628826638215609023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -6.55, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 628826637103015598}
@@ -106,9 +106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies:
+<<<<<<< Updated upstream
   - {fileID: 6861005185341191164, guid: 82b763df332d10541bdad893133d1967, type: 3}
   - {fileID: 64294843031205098, guid: 989d0178e5beb634e8ef046a67a6f766, type: 3}
+=======
+  - {fileID: 8213028650450337474, guid: cb1bde00825b2da4fb36ba572440effd, type: 3}
+>>>>>>> Stashed changes
   leftLimitPosition: {fileID: 628826637103015598}
   rightLimitPosition: {fileID: 628826636762827388}
-  spawnRate: 2
-  enemiesLimit: 12
+  spawnRate: 60
+  enemiesLimit: 10

@@ -8,12 +8,12 @@ public enum RoomCategory
 {
 	Spawn = 1,
 	Teleport = 2,
-	Clear = 3,
-	WithEnemies = 10,
-	WithBounty = 11,
+	MinCategory = 10,
+	Enemies = 11,
+	Clear = 12,
+	MaxCategory,
 	Default = 100
 }
-
 
 public class Room
 {
@@ -34,11 +34,6 @@ public class Room
 
 		SetExits(false, false, false, false);
 		SetFullMap();
-	}
-
-	public void RandomCategory()
-	{
-		Category = (RoomCategory)Random.Range(10, 12);
 	}
 
 	public void SetExits(bool upOpen, bool downOpen, bool leftOpen, bool rightOpen)
@@ -91,6 +86,17 @@ public class Room
 			for (int j = 0; j < height; j++)
 			{
 				map[i, j] = 1;
+			}
+		}
+	}
+
+	public void SetClearMap()
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				map[i, j] = 0;
 			}
 		}
 	}
@@ -148,10 +154,10 @@ public class Room
 
 		if ((int)Category < 10)
 		{
-			startCutUp += midHeight / 2;
-			startCutDown -= midHeight / 2;
-			startCutLeft -= midWidth / 2;
-			startCutRight += midWidth / 2;
+			startCutUp = height - 1;
+			startCutDown = 0;
+			startCutLeft = 0;
+			startCutRight = width - 1;
 		}
 
 		if (upOpen)

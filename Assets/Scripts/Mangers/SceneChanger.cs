@@ -47,6 +47,11 @@ public class SceneChanger : MonoBehaviour
 
 	public void LoadSceneByName(string sceneName)
 	{
+		GameObject editCamera = GameObject.Find("EditCamera");
+		if (editCamera != null)
+			Destroy(editCamera);
+
+
 		InMenu = sceneName == "Menu" ? true : false;
 		StartCoroutine(LoadSceneByNameCoroutine(sceneName));
 	}

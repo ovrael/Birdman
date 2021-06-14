@@ -5,10 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class RoomFunctions : MonoBehaviour
 {
-	public static Transform objectsParent;
-	public static GameObject spawn;
-	public static GameObject teleport;
-
 	/// <summary>
 	/// Creates a perlin noise int array for the top layer of a level
 	/// </summary>
@@ -29,6 +25,18 @@ public class RoomFunctions : MonoBehaviour
 			}
 		}
 		return rooms;
+	}
+
+	public static void DeleteRoomsIsntOnPath(Room[,] rooms)
+	{
+		for (int i = 0; i < rooms.GetLength(0); i++)
+		{
+			for (int j = 0; j < rooms.GetLength(1); j++)
+			{
+				if (!rooms[i, j].OnPath)
+					rooms[i, j].SetClearMap();
+			}
+		}
 	}
 
 	// [UP, DOWN, LEFT, RIGHT]
@@ -175,44 +183,6 @@ public class RoomFunctions : MonoBehaviour
 		}
 	}
 
-	public static void AddTeleport(Vector2 position, float halfRoomWidth, float halfRoomHeight)
-	{
-		Vector2 bias = new Vector2(0f, +0.2f);
-		Vector3 spawnPosition = new Vector3(position.x + halfRoomWidth + bias.x, position.y + halfRoomHeight + bias.y, 0);
-		Instantiate(teleport, spawnPosition, Quaternion.identity, objectsParent);
-	}
-
-	public static void AddSpawn(Vector2 position, float halfRoomWidth, float halfRoomHeight)
-	{
-		Vector2 bias = new Vector2(0f, -0.4f);
-		Vector3 spawnPosition = new Vector3(position.x + halfRoomWidth + bias.x, position.y + halfRoomHeight + bias.y, 0);
-		Instantiate(spawn, spawnPosition, Quaternion.identity, objectsParent);
-	}
-
-	public static void AddElements(Room room, Vector2 position)
-	{
-		float halfRoomWidth = room.Width / 2f;
-		float halfRoomHeight = room.Height / 2f;
-
-		switch (room.Category)
-		{
-			case RoomCategory.Spawn:
-				AddSpawn(position, halfRoomWidth, halfRoomHeight);
-				break;
-			case RoomCategory.Teleport:
-				AddTeleport(position, halfRoomWidth, halfRoomHeight);
-				break;
-			case RoomCategory.Clear:
-				break;
-			case RoomCategory.WithEnemies:
-				break;
-			case RoomCategory.WithBounty:
-				break;
-			default:
-				break;
-		}
-	}
-
 	/// <summary>
 	/// Draws the map to the screen
 	/// </summary>
@@ -223,6 +193,7 @@ public class RoomFunctions : MonoBehaviour
 	{
 		int roomWidth = rooms[0, 0].Width;
 		int roomHeight = rooms[0, 0].Height;
+
 		tilemap.ClearAllTiles(); //Clear the map (ensures we dont overlap)
 		Vector2Int offset = new Vector2Int(0, 0);
 
@@ -231,8 +202,6 @@ public class RoomFunctions : MonoBehaviour
 			for (int j = 0; j < rooms.GetLength(0); j++)
 			{
 				RenderMapWithOffset(rooms[j, i].Map, tilemap, tile, offset);
-				AddElements(rooms[j, i], offset);
-
 				offset.x += roomWidth;
 			}
 			offset.x = 0;
